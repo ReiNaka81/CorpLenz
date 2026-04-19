@@ -1,0 +1,24 @@
+# --- API・HTTP ---
+requests        # HTTPリクエスト
+python-dotenv   # .envファイルから環境変数を読み込む
+
+# --- PDF処理 ---
+pymupdf4llm     # PDFをMarkdownに変換
+
+# --- Embedding・LLM ---
+openai                  # OpenAI Embedding（text-embedding-3-small）
+anthropic               # Claude API（LLM呼び出し）
+langchain               # RAGチェーン・エージェント構築フレームワーク
+langchain-openai        # LangChain × OpenAI連携
+langchain-anthropic     # LangChain × Claude連携
+langchain-mongodb       # LangChain × MongoDB Vector Search連携
+
+# --- MongoDB ---
+pymongo         # MongoDBクライアント（Vector Search・データ保存）
+
+# --- データ処理 ---
+pydantic        # 財務データ・APIレスポンスの構造化・バリデーション
+
+# --- Webフレームワーク ---
+fastapi         # バックエンドAPIサーバー
+uvicorn         # FastAPIを動かすASGIサーバー
