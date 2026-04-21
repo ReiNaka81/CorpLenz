@@ -1,35 +1,27 @@
-import os
-import glob
-from dotenv import load_dotenv
-from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_core.documents import Document
 
-load_dotenv()
 
-def load_documents() -> list[Document]:   
-    folders = glob.glob("./data/*")
+def split_text(sections: list[dict], ticker: str, year: int) -> list[dict]:
+    """セクションごとのMarkdownをチャンク化してMongoDBに保存できる形式で返す。
 
-    documents = []
-    for folder in folders:  
-        doc_type = os.path.basename(folder)
-        loader = DirectoryLoader(folder, glob="**/*.md", loader_cls=TextLoader, loader_kwargs={'encoding': 'utf-8'})    # glob="**/*.md": folder 以下の全サブディレクトリから .md ファイルのみ対象
-        folder_docs = loader.load()
-        for doc in folder_docs: 
-            doc.metadata["doc_type"] = doc_type
-            documents.append(doc)
-
-    print(f"{len(documents)}つのファイルを読み込みました。")
-    return documents
-
-def split_text(documents: list[Document]) -> list[Document]:   
+    Args:
+        sections: parse_ixbrl() の出力（[{"section": "事業の状況", "markdown": "..."}, ...]）
+        ticker: 対象企業の証券コード（例: "7203"）
+        year: 対象年度（例: 2024）
+    Returns:
+        チャンクのリスト（[{"text": "...", "section": "...", "ticker": "...", "year": ...}, ...]）
+    """
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
-    chunks = text_splitter.split_documents(documents)
+    chunks = []
+    for section in sections:
+        texts = text_splitter.split_text(section["markdown"])
+        for text in texts:
+            chunks.append({
+                "text": text,
+                "section": section["section"],
+                "ticker": ticker,
+                "year": year,
+            })
 
     print(f"{len(chunks)}つのチャンクに分割されました。")
     return chunks
-
-if __name__ == "__main__":  
-    documents = load_documents()
-    results = split_text(documents)
-    print(f"chuns[0]は{results[0]}です。")
