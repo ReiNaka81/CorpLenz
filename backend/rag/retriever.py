@@ -1,27 +1,11 @@
 import time
-import os
-from pymongo import MongoClient
 from pymongo.operations import SearchIndexModel
 from ingestion.embedding import get_embedding
+from db.mongo import get_collection
 
-MONGO_URI = os.getenv("MONGO_URI")
 INDEX_NAME = "vector_index"
 INDEX_CREATION_TIMEOUT = 300
 NUM_CANDIDATES = 100
-
-
-def get_collection(collection_name: str = "chunks"):
-    """MongoDB の対象コレクションへの参照を返す。
-
-    Args:
-        collection_name: 取得するコレクション名。
-                         "chunks"（詳細質問・ES添削用）または
-                         "summaries"（概要・まとめ系質問用）を指定する。
-    Returns:
-        pymongo の Collection オブジェクト
-    """
-    client = MongoClient(MONGO_URI)
-    return client["rag_db"][collection_name]
 
 def create_vector_index():
     """MongoDB Atlas に vector search index を作成し、queryable になるまで待機する。
