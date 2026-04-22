@@ -1,19 +1,21 @@
 import re
 import zipfile
 from pathlib import Path
-
 from bs4 import BeautifulSoup
 from markdownify import markdownify
+from ingestion.section_map import SECTION_MAP
 
 
 # 本文ファイルのプレフィックス（ヘッダー・監査報告書は除外）
 _HONBUN_PREFIX = "honbun"
 
-
 def _extract_section_title(filename: str) -> str:
-    """ファイル名から番号を取り出してセクション識別子にする（例: 0101010）"""
+    """ファイル名からセクション名を返す。対応表にないコードはコードをそのまま返す。"""
     match = re.search(r"(\d{7})_honbun", filename)
-    return match.group(1) if match else filename
+    if not match:
+        return filename
+    code = match.group(1)
+    return SECTION_MAP.get(code, code)
 
 
 def _clean_ixbrl(html: str) -> str:
