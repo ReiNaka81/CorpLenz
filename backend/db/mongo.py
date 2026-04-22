@@ -1,8 +1,14 @@
 import os
+from dotenv import load_dotenv
 from pymongo import MongoClient
 
-MONGO_URI = os.getenv("MONGO_URI")
+load_dotenv()
+
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+
+uri = f"mongodb+srv://{DB_USER}:{DB_PASSWORD}@recruit.xqewuj0.mongodb.net/?appName=recruit"
 
 def get_collection(collection_name: str = "chunks"):
-    client = MongoClient(MONGO_URI)
+    client = MongoClient(uri)
     return client["rag_db"][collection_name]
