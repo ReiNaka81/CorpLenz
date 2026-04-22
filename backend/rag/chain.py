@@ -33,13 +33,15 @@ def list_to_str(origin: list[dict]) -> str:
 
     return "\n\n".join(parts)
 
-def answer_with_context(query: str, context: str) -> str:   
+def answer_with_context(query: str, contexts: list[dict]) -> str:   
     """質問文とチャンクをclaudeに投げ、回答を返却する。
     
     Args:
         query: ユーザの質問文。
         context: mongoDBからのチャンク。
     """
+
+    context = list_to_str(contexts)
 
     client = Anthropic(
         api_key = ANTHROPIC_API_KEY,
