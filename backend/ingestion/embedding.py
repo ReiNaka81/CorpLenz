@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 import voyageai
-from rag.retriever import get_collection
+from db.mongo import get_collection
 
 load_dotenv()
 
