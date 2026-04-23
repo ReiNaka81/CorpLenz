@@ -21,11 +21,19 @@ interface SidebarProps {
 
 export function Sidebar({ width, isOpen, onToggle, onWidthChange }: SidebarProps) {
   const router = useRouter()
-  const { selectedCompany, setSelectedCompany, searchQuery, activeFilter } = useAppStore()
+  const {
+    selectedCompany, setSelectedCompany,
+    splitEnabled, activePane, setRightPaneCompany,
+    searchQuery, activeFilter,
+  } = useAppStore()
 
   const handleSelect = (company: Company) => {
-    setSelectedCompany(company)
-    router.push(`/${company.ticker}`)
+    if (splitEnabled && activePane === 'right') {
+      setRightPaneCompany(company)
+    } else {
+      setSelectedCompany(company)
+      router.push(`/${company.ticker}`)
+    }
   }
 
   const filtered = useMemo(() => {
