@@ -31,8 +31,8 @@ export function CompanyItem({ company, isActive, onClick }: CompanyItemProps) {
         />
       )}
       <span
-        className="w-2 h-2 rounded-full shrink-0"
-        style={{ backgroundColor: company.color }}
+        className="w-0.5 h-3.5 rounded-full shrink-0"
+        style={{ backgroundColor: 'var(--vsc-text-muted)' }}
       />
       <span className="flex-1 truncate">{company.name}</span>
       <span className="text-xs shrink-0" style={{ color: 'var(--vsc-text-muted)' }}>
