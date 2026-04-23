@@ -1,4 +1,4 @@
-import { Company, CompanyFinancials } from '@/types'
+import { Company, CompanyFinancials, CompanySummary } from '@/types'
 
 export const mockCompanies: Company[] = [
   { id: '1', name: 'トヨタ自動車', ticker: '7203', sector: '製造業', color: '#e50012' },
@@ -12,6 +12,93 @@ export const mockCompanies: Company[] = [
   { id: '9', name: '三菱UFJフィナンシャル', ticker: '8306', sector: '金融', color: '#d32f2f' },
   { id: '10', name: '東京エレクトロン', ticker: '8035', sector: '製造業', color: '#1565c0' },
 ]
+
+export const mockSummaries: Record<string, CompanySummary> = {
+  '7203': {
+    human_capital: {
+      employee_count_consolidated: 375235,
+      employee_count_standalone: 72567,
+      average_age: 40.5,
+      average_tenure: 17.2,
+      average_salary: 895,
+      female_manager_ratio: 8.2,
+      commentary: '連結従業員数は国内製造業最大規模の37万人超。平均勤続年数17年超と離職率が低く、長期雇用が根付いた文化を持つ。平均年収895万円は製造業トップクラス。女性管理職比率は8.2%と業界平均を上回るが、さらなる向上が課題として掲げられている。',
+    },
+    business: {
+      description: '自動車の設計・製造・販売を中核事業とし、ハイブリッド・電気・燃料電池車など幅広いパワートレインを展開。金融サービス（ローン・リース）も収益の柱。トヨタ生産方式（TPS）はグローバルで製造業のスタンダードとなっている。',
+      segments: [
+        { name: '自動車', revenue_ratio: 0.89 },
+        { name: '金融', revenue_ratio: 0.08 },
+        { name: 'その他', revenue_ratio: 0.03 },
+      ],
+      rd_expense: 11400,
+      history_highlights: '1937年豊田自動車工業として設立。1950年代に量産体制を確立し国内トップへ。1997年プリウス発売でハイブリッド車市場を開拓。2023年純利益5兆円超で過去最高を更新。',
+    },
+    management: {
+      policy: 'カーボンニュートラル実現に向けた「全方位戦略」を掲げ、HV・PHV・EV・FCEVを並行展開。2030年までにEV150万台販売を目標とする。ソフトウェア定義車両（SDV）への転換も重点投資領域。',
+      challenges: '電動化投資と既存事業収益のバランス確保。半導体・電池などサプライチェーンの安定化。ソフトウェア人材の確保と社内DX推進。新興EV勢力（BYD等）との価格競争への対応。',
+      risks: '為替リスク（1円の円安で約500億円の営業利益増減）。電動化移行期のモデルミックス変化。原材料（希少金属・鉄鋼）の価格変動。各国の排ガス規制強化への対応コスト。',
+      capex: 15000,
+    },
+  },
+  '6758': {
+    human_capital: {
+      employee_count_consolidated: 109700,
+      employee_count_standalone: 2013,
+      average_age: 42.3,
+      average_tenure: 15.8,
+      average_salary: 1292,
+      female_manager_ratio: 21.5,
+      commentary: 'ソニーグループは純粋持株会社のため単体従業員数は約2,000人。連結では約11万人のグローバル人材を擁する。平均年収1,292万円はエンターテインメント・テック企業として国内最高水準。女性管理職比率21.5%はグローバル企業として高い水準を維持している。',
+    },
+    business: {
+      description: 'エレクトロニクス・エンターテインメント・金融の3軸で構成。PlayStation・音楽・映画・アニメなどのエンタメ事業が安定した利益の柱。センサー（特にCMOSイメージセンサー）はスマートフォン向けで世界シェア首位を誇る。',
+      segments: [
+        { name: 'ゲーム&ネットワーク', revenue_ratio: 0.29 },
+        { name: '音楽', revenue_ratio: 0.14 },
+        { name: '映画', revenue_ratio: 0.11 },
+        { name: 'エレクトロニクス', revenue_ratio: 0.22 },
+        { name: 'イメージ&センシング', revenue_ratio: 0.12 },
+        { name: '金融', revenue_ratio: 0.12 },
+      ],
+      rd_expense: 6200,
+      history_highlights: '1946年東京通信工業として設立。1979年ウォークマン発売で携帯音楽市場を創出。1994年PlayStation発売。2012年以降エンタメへ事業転換。2021年ソニーグループに社名変更。',
+    },
+    management: {
+      policy: '「クリエイティビティとテクノロジーの力で、世界を感動で満たす」をパーパスに掲げる。エンターテインメント・テクノロジー・金融の融合によるシナジー最大化を推進。AI・クラウド活用でコンテンツ配信の高度化を図る。',
+      challenges: 'PlayStation向けコンテンツの継続的な充実と競合（Microsoft等）への対応。CMOSセンサーの中国スマホ市場依存からの分散。金融子会社（ソニー銀行等）の独立上場検討と持株会社との関係整理。',
+      risks: '為替変動（円安は売上増・円高は利益減）。ゲームソフト開発コストの高騰。半導体供給制約によるセンサー生産への影響。地政学リスク（米中対立による中国事業への影響）。',
+      capex: 5800,
+    },
+  },
+  '6501': {
+    human_capital: {
+      employee_count_consolidated: 123812,
+      employee_count_standalone: 33813,
+      average_age: 43.1,
+      average_tenure: 18.5,
+      average_salary: 893,
+      female_manager_ratio: 11.3,
+      commentary: '連結12万人超のグローバル総合電機メーカー。平均勤続18.5年と日立グループの長期雇用文化を反映。デジタル事業への転換に伴い、DX・クラウド人材の採用を強化している。女性管理職比率は11.3%で着実に上昇中。',
+    },
+    business: {
+      description: 'デジタルシステム&サービス（ITコンサル・クラウド）、グリーンエナジー&モビリティ（エネルギー・鉄道）、コネクティブインダストリーズ（産業機器・IoT）の3セグメントで構成。2021年以降、家電・化学など非中核事業を売却しITサービス企業への転換を加速。',
+      segments: [
+        { name: 'デジタルシステム&サービス', revenue_ratio: 0.38 },
+        { name: 'グリーンエナジー&モビリティ', revenue_ratio: 0.34 },
+        { name: 'コネクティブインダストリーズ', revenue_ratio: 0.28 },
+      ],
+      rd_expense: 3200,
+      history_highlights: '1910年設立。1950〜80年代に総合電機として成長。2008年リーマンショック後に7,873億円の最終赤字を計上し構造改革を開始。2020年代にITサービス企業への転換を完遂。Lumadaプラットフォームが成長の核。',
+    },
+    management: {
+      policy: 'データ・AI・デジタル技術を活用した社会インフラの高度化「Social Innovation Business」を推進。Lumada（データ活用ソリューション）の売上比率引き上げを最重要KPIとして設定。2030年に売上収益14兆円・調整後EBIT率10%以上を目標。',
+      challenges: 'Lumadaビジネスの安定成長と収益化。GlobalLogic（買収したITサービス企業）とのシナジー創出。エネルギー・鉄道事業における大型プロジェクトの採算管理。',
+      risks: 'ITサービス市場での競合激化（アクセンチュア・富士通等）。大型M&Aに伴ののれん減損リスク。エネルギー・インフラ案件の納期遅延・コスト超過。',
+      capex: 3800,
+    },
+  },
+}
 
 export const mockFinancials: Record<string, CompanyFinancials> = {
   '7203': {
