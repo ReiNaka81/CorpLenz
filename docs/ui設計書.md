@@ -8,14 +8,21 @@ AppLayout
 ├── AppBody (flex row)
 │   ├── ActivityBar
 │   ├── Sidebar
-│   ├── MainPanel
-│   │   ├── SearchBar
-│   │   ├── TabBar
-│   │   └── CompanyDetail
-│   │       ├── CompanyHeader
-│   │       ├── KPIGrid
-│   │       ├── FinancialCharts
-│   │       └── FinancialTable
+│   ├── MainPanel（スプリット対応：左右2ペイン）
+│   │   ├── SearchBar（ペイン共通・上部固定）
+│   │   ├── [左ペイン]
+│   │   │   ├── TabBar
+│   │   │   └── CompanyDetail
+│   │   │       ├── CompanyHeader
+│   │   │       ├── HumanCapitalSection   ← ① 人的資本
+│   │   │       ├── BusinessSection       ← ② 事業概要
+│   │   │       ├── ManagementSection     ← ③ 将来性・経営課題
+│   │   │       ├── KPIGrid               ← ④ 財務
+│   │   │       ├── FinancialCharts
+│   │   │       └── FinancialTable
+│   │   └── [右ペイン（スプリット時）]
+│   │       ├── TabBar
+│   │       └── CompanyDetail（同構成）
 │   └── ChatPanel
 │       ├── ChatHeader
 │       ├── MessageList
@@ -108,6 +115,17 @@ shadcn で賄えないもの（自作）：
 - タブがオーバーフローしたら横スクロール
 
 ### CompanyDetail
+
+縦スクロール＋セクションヘッダー方式。`ScrollArea` で全体をラップし、セクションを上から順に表示する。
+
+#### セクション構成
+
+| # | セクション | コンポーネント | データソース |
+|---|---|---|---|
+| ① | 人的資本 | `HumanCapitalSection` | `companies.summary.human_capital` |
+| ② | 事業概要 | `BusinessSection` | `companies.summary.business` |
+| ③ | 将来性・経営課題 | `ManagementSection` | `companies.summary.management` |
+| ④ | 財務（既存） | `KPIGrid` + `FinancialCharts` + `FinancialTable` | `financials` |
 
 #### CompanyHeader
 
