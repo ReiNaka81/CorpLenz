@@ -1,24 +1,25 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { ArrowUp } from 'lucide-react'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 
 interface ChatInputProps {
+  value: string
+  onChange: (value: string) => void
   onSend: (text: string) => void
   disabled?: boolean
 }
 
-export function ChatInput({ onSend, disabled }: ChatInputProps) {
-  const [value, setValue] = useState('')
+export function ChatInput({ value, onChange, onSend, disabled }: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const handleSend = () => {
     const trimmed = value.trim()
     if (!trimmed || disabled) return
     onSend(trimmed)
-    setValue('')
+    onChange('')
     textareaRef.current?.style && (textareaRef.current.style.height = 'auto')
   }
 
@@ -30,7 +31,7 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
   }
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(e.target.value)
+    onChange(e.target.value)
     const el = e.target
     el.style.height = 'auto'
     el.style.height = `${Math.min(el.scrollHeight, 80)}px`

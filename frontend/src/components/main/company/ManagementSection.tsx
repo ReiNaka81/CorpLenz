@@ -1,6 +1,7 @@
 'use client'
 
 import { ManagementSummary } from '@/types'
+import { useAppStore } from '@/store/appStore'
 
 interface ManagementSectionProps {
   data: ManagementSummary
@@ -21,6 +22,13 @@ function TextBlock({ label, text }: TextBlockProps) {
 }
 
 export function ManagementSection({ data }: ManagementSectionProps) {
+  const { setPendingQuestion, setChatOpen } = useAppStore()
+
+  const askLLM = () => {
+    setChatOpen(true)
+    setPendingQuestion('この企業の経営方針・課題・リスクについて、就活の面接や志望動機にどう活かせるか教えてください。')
+  }
+
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
@@ -45,6 +53,14 @@ export function ManagementSection({ data }: ManagementSectionProps) {
       <TextBlock label="経営方針" text={data.policy} />
       <TextBlock label="対処すべき課題" text={data.challenges} />
       <TextBlock label="事業リスク" text={data.risks} />
+
+      <button
+        onClick={askLLM}
+        className="text-xs hover:underline transition-colors"
+        style={{ color: 'var(--vsc-accent)' }}
+      >
+        AIアナリストに詳しく聞く →
+      </button>
     </div>
   )
 }

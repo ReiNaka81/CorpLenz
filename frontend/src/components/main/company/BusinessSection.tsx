@@ -1,12 +1,20 @@
 'use client'
 
 import { BusinessSummary } from '@/types'
+import { useAppStore } from '@/store/appStore'
 
 interface BusinessSectionProps {
   data: BusinessSummary
 }
 
 export function BusinessSection({ data }: BusinessSectionProps) {
+  const { setPendingQuestion, setChatOpen } = useAppStore()
+
+  const askLLM = () => {
+    setChatOpen(true)
+    setPendingQuestion('この企業の事業内容・セグメント構成・競合優位性について、就活生の視点から詳しく教えてください。')
+  }
+
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
@@ -58,6 +66,14 @@ export function BusinessSection({ data }: BusinessSectionProps) {
           {data.history_highlights}
         </p>
       </div>
+
+      <button
+        onClick={askLLM}
+        className="text-xs hover:underline transition-colors"
+        style={{ color: 'var(--vsc-accent)' }}
+      >
+        AIアナリストに詳しく聞く →
+      </button>
     </div>
   )
 }

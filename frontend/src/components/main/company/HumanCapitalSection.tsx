@@ -1,6 +1,7 @@
 'use client'
 
 import { HumanCapital } from '@/types'
+import { useAppStore } from '@/store/appStore'
 
 interface StatCardProps {
   label: string
@@ -24,6 +25,13 @@ interface HumanCapitalSectionProps {
 }
 
 export function HumanCapitalSection({ data }: HumanCapitalSectionProps) {
+  const { setPendingQuestion, setChatOpen } = useAppStore()
+
+  const askLLM = () => {
+    setChatOpen(true)
+    setPendingQuestion('人的資本（従業員数・平均年収・勤続年数・女性管理職比率）について、就活生として注目すべきポイントや他社との比較の観点を教えてください。')
+  }
+
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
@@ -72,6 +80,14 @@ export function HumanCapitalSection({ data }: HumanCapitalSectionProps) {
       <p className="text-xs leading-relaxed" style={{ color: 'var(--vsc-text-muted)' }}>
         {data.commentary}
       </p>
+
+      <button
+        onClick={askLLM}
+        className="text-xs hover:underline transition-colors"
+        style={{ color: 'var(--vsc-accent)' }}
+      >
+        AIアナリストに詳しく聞く →
+      </button>
     </div>
   )
 }

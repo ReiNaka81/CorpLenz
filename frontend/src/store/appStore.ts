@@ -23,6 +23,11 @@ interface AppStore {
   chatHistories: Record<string, Message[]>
   addMessage: (companyId: string, message: Message) => void
 
+  chatOpen: boolean
+  setChatOpen: (open: boolean) => void
+  pendingQuestion: string | null
+  setPendingQuestion: (q: string | null) => void
+
   searchQuery: string
   activeFilter: string
   setSearchQuery: (q: string) => void
@@ -113,6 +118,11 @@ export const useAppStore = create<AppStore>()(
           },
         })
       },
+
+      chatOpen: true,
+      setChatOpen: (open) => set({ chatOpen: open }),
+      pendingQuestion: null,
+      setPendingQuestion: (q) => set({ pendingQuestion: q }),
 
       searchQuery: '',
       activeFilter: 'すべて',

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Company, Message } from '@/types'
 import { useAppStore } from '@/store/appStore'
@@ -19,10 +19,18 @@ interface ChatPanelProps {
 }
 
 export function ChatPanel({ company, width, isOpen, onToggle, onWidthChange }: ChatPanelProps) {
-  const { chatHistories, addMessage } = useAppStore()
+  const { chatHistories, addMessage, pendingQuestion, setPendingQuestion } = useAppStore()
   const [loading, setLoading] = useState(false)
+  const [inputValue, setInputValue] = useState('')
 
   const messages: Message[] = company ? (chatHistories[company.id] ?? []) : []
+
+  useEffect(() => {
+    if (pendingQuestion) {
+      setInputValue(pendingQuestion)
+      setPendingQuestion(null)
+    }
+  }, [pendingQuestion, setPendingQuestion])
 
   const handleSend = async (text: string) => {
     if (!company) return
@@ -135,7 +143,7 @@ export function ChatPanel({ company, width, isOpen, onToggle, onWidthChange }: C
         </div>
       )}
 
-      <ChatInput onSend={handleSend} disabled={!company || loading} />
+      <ChatInput value={inputValue} onChange={setInputValue} onSend={handleSend} disabled={!company || loading} />
     </div>
   )
 }

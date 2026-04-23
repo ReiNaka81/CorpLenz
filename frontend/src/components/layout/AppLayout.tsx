@@ -11,11 +11,10 @@ import { ChatPanel } from '@/components/chat/ChatPanel'
 import { useAppStore } from '@/store/appStore'
 
 export function AppLayout() {
-  const { selectedCompany, splitEnabled, rightPaneCompany, setActivePane } = useAppStore()
+  const { selectedCompany, splitEnabled, rightPaneCompany, setActivePane, chatOpen, setChatOpen } = useAppStore()
   const [activeItem, setActiveItem] = useState('企業一覧')
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [sidebarWidth, setSidebarWidth] = useState(240)
-  const [chatOpen, setChatOpen] = useState(true)
   const [chatWidth, setChatWidth] = useState(320)
   const [splitRatio, setSplitRatio] = useState(0.5)
   const mainRef = useRef<HTMLDivElement>(null)
@@ -117,7 +116,7 @@ export function AppLayout() {
           company={selectedCompany}
           width={chatWidth}
           isOpen={chatOpen}
-          onToggle={() => setChatOpen((o) => !o)}
+          onToggle={() => setChatOpen(!chatOpen)}
           onWidthChange={setChatWidth}
         />
       </div>
