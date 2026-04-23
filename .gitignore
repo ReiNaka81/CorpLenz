@@ -212,6 +212,10 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/nextjs,python
 
 ### Project-specific ###
+# frontend/src/lib は Python の lib/ ルールの誤適用を除外
+!frontend/src/lib/
+
+
 # EDINET downloaded files (PDFs, XBRL)
 backend/data/
 *.xbrl
