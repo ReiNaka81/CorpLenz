@@ -1,6 +1,7 @@
 import zipfile
 import re
 from pathlib import Path
+from db.mongo import get_collection
 
 
 # 抽出対象タグのキーワードと対応する項目名
@@ -141,16 +142,14 @@ def debug_tags(xbrl_zip_path: str | Path, metric: str = "revenue") -> None:
         print(f"{m['name']:80s}  ctx={m['context']:50s}  val={m['value']:>20,}")
 
 
-def parse_xbrl(xbrl_zip_path: str | Path, base_year: int) -> list[dict]:
+def parse_xbrl(xbrl_zip_path: str | Path, ticker: str, base_year: int) -> None:
     """
-    EDINETからダウンロードしたXBRL ZIPを解析して5年分の財務数値を返す
+    EDINETからダウンロードしたXBRL ZIPを解析して5年分の財務数値をMongoDBに保存する
 
     Args:
         xbrl_zip_path: _xbrl.zip のパス
+        ticker: 対象企業の証券コード（例: "7203"）
         base_year: 当期の年度（例: 2024）
-
-    Returns:
-        [{year: 2024, revenue: ..., ...}, {year: 2023, ...}, ...]
     """
     all_items: list[dict] = []
 
@@ -165,14 +164,14 @@ def parse_xbrl(xbrl_zip_path: str | Path, base_year: int) -> list[dict]:
         year = base_year - offset
         financials = _extract_year(all_items, duration_ctx, instant_ctx)
         if any(v is not None for v in financials.values()):
-            results.append({"year": year, **financials})
+            results.append({"ticker": ticker, "year": year, **financials})
 
-    return results
+    get_collection("financials").insert_many(results)
+    print(f"{len(results)}年分の財務データを financials に保存しました。")
 
 
 if __name__ == "__main__":
     import argparse
-    import json
     from pathlib import Path
 
     parser = argparse.ArgumentParser()
@@ -198,5 +197,7 @@ if __name__ == "__main__":
     if args.debug is not None:
         debug_tags(zip_files[0], metric=args.debug)
     else:
-        result = parse_xbrl(zip_files[0], base_year=args.year)
-        print(json.dumps(result, ensure_ascii=False, indent=2))
+        if not args.ticker:
+            print("[error] --ticker は保存時に必須です")
+            exit(1)
+        parse_xbrl(zip_files[0], ticker=args.ticker, base_year=args.year)
