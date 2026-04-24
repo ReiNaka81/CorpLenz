@@ -73,7 +73,6 @@ pymupdf==1.27.2.2
 pymupdf-layout==1.27.2.2
 pymupdf4llm==1.27.2.2
 pypdf==6.10.2
-python-dotenv==1.2.2
 pyyaml==6.0.3
 regex==2026.4.4
 requests==2.33.1

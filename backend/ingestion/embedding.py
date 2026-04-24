@@ -1,9 +1,6 @@
 import os
-from dotenv import load_dotenv
 import voyageai
 from db.mongo import get_collection
-
-load_dotenv()
 
 VOYAGE_API_KEY = os.getenv("VOYAGE_API_KEY")
 EMBEDDING_MODEL = "voyage-finance-2"
