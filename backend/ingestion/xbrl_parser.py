@@ -159,11 +159,16 @@ def parse_xbrl(xbrl_zip_path: str | Path, ticker: str, base_year: int) -> None:
             content = z.read(htm_file).decode("utf-8", errors="ignore")
             all_items.extend(_extract_nonfractions(content))
 
+    OKU = 100_000_000  # 円 → 億円
+
     collection = get_collection("financials")
     count = 0
     for offset, (duration_ctx, instant_ctx) in YEAR_CONTEXTS.items():
         year = base_year - offset
         financials = _extract_year(all_items, duration_ctx, instant_ctx)
+        for metric in ["revenue", "pretax_profit", "net_profit", "total_assets", "equity"]:
+            if financials.get(metric) is not None:
+                financials[metric] = financials[metric] // OKU
         if any(v is not None for v in financials.values()):
             collection.update_one(
                 {"ticker": ticker, "year": year},

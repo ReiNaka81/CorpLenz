@@ -10,7 +10,7 @@ def get_summary(ticker: str):
     financials_collection = get_collection("financials")
 
     company_doc = companies_collection.find_one({"ticker": ticker}, {"_id": 0})
-    financials = list(financials_collection.find({"ticker": ticker}, {"_id": 0}))
+    financials = list(financials_collection.find({"ticker": ticker}, {"_id": 0}).sort("year", 1))
 
     if not company_doc or not financials:
         raise HTTPException(status_code=404, detail=f"ticker {ticker} のデータが見つかりません")
