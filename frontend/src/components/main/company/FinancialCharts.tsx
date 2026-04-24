@@ -40,7 +40,7 @@ function SparklineCard({ title, latestLabel, data, color }: SparklineCardProps) 
       </CardHeader>
       <CardContent className="px-1 pb-3">
         <ResponsiveContainer width="100%" height={80}>
-          <AreaChart data={data} margin={{ top: 4, right: 8, left: 8, bottom: 0 }}>
+          <AreaChart data={data} margin={{ top: 4, right: 20, left: 20, bottom: 0 }}>
             <defs>
               <linearGradient id={`grad-${color.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor={color} stopOpacity={0.3} />
@@ -52,6 +52,7 @@ function SparklineCard({ title, latestLabel, data, color }: SparklineCardProps) 
               tick={{ fill: '#858585', fontSize: 10 }}
               axisLine={false}
               tickLine={false}
+              interval={0}
             />
             <YAxis hide />
             <Tooltip
