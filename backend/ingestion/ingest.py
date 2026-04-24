@@ -2,6 +2,7 @@ from pathlib import Path
 from ingestion.html_parser import parse_ixbrl
 from ingestion.chunker import split_text
 from ingestion.embedding import insert_chunks
+from db.mongo import create_vector_index
 
 
 def ingest(zip_path: str | Path, ticker: str, year: int) -> None:
@@ -12,6 +13,7 @@ def ingest(zip_path: str | Path, ticker: str, year: int) -> None:
         ticker: 対象企業の証券コード（例: "7203"）
         year: 対象年度（例: 2024）
     """
+    create_vector_index("chunks", "vector_index")
     sections = parse_ixbrl(zip_path)
     chunks = split_text(sections, ticker, year)
     insert_chunks(chunks)
