@@ -159,15 +159,20 @@ def parse_xbrl(xbrl_zip_path: str | Path, ticker: str, base_year: int) -> None:
             content = z.read(htm_file).decode("utf-8", errors="ignore")
             all_items.extend(_extract_nonfractions(content))
 
-    results = []
+    collection = get_collection("financials")
+    count = 0
     for offset, (duration_ctx, instant_ctx) in YEAR_CONTEXTS.items():
         year = base_year - offset
         financials = _extract_year(all_items, duration_ctx, instant_ctx)
         if any(v is not None for v in financials.values()):
-            results.append({"ticker": ticker, "year": year, **financials})
+            collection.update_one(
+                {"ticker": ticker, "year": year},
+                {"$set": {"ticker": ticker, "year": year, **financials}},
+                upsert=True,
+            )
+            count += 1
 
-    get_collection("financials").insert_many(results)
-    print(f"{len(results)}年分の財務データを financials に保存しました。")
+    print(f"{count}年分の財務データを financials に保存しました。")
 
 
 if __name__ == "__main__":

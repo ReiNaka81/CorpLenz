@@ -42,5 +42,8 @@ def insert_chunks(chunks: list[dict], collection_name: str = "chunks") -> None:
                 "embedding": embedding,
             })
 
+    ticker = chunks[0]["ticker"]
+    year = chunks[0]["year"]
+    collection.delete_many({"ticker": ticker, "year": year})
     collection.insert_many(docs)
     print(f"{len(docs)}件を {collection_name} に保存しました。")
