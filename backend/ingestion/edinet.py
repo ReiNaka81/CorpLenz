@@ -1,11 +1,8 @@
-from dotenv import load_dotenv
 import os
 import requests
 from datetime import datetime, timedelta
 from pathlib import Path
 import time
-
-load_dotenv()
 
 EDINET_API_KEY = os.getenv("EDINET_API_KEY")
 BASE_URL = "https://api.edinet-fsa.go.jp//api/v2"
