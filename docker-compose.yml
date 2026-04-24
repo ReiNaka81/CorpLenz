@@ -7,6 +7,13 @@ services:
       - ./backend:/app
     environment:
       - PYTHONUNBUFFERED=1
+      - ANTHROPIC_API_KEY
+      - CLAUDE_MODEL
+      - VOYAGE_API_KEY
+      - MONGO_URI
+      - DB_USER
+      - DB_PASSWORD
+      - EDINET_API_KEY
 
   frontend:
     build: ./frontend
