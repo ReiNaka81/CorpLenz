@@ -1,7 +1,9 @@
 import os
 import time
+from datetime import datetime, timezone
 from pymongo import MongoClient
 from pymongo.operations import SearchIndexModel
+from models.models import CompanySummary
 
 DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
@@ -53,3 +55,18 @@ def create_vector_index(collection_name: str):
         time.sleep(5)
 
     raise TimeoutError(f"vector indexが {INDEX_CREATION_TIMEOUT}秒以内に queryable にならなかった")
+
+
+def upsert_company(ticker: str, summary: CompanySummary) -> None:
+    """companiesコレクションに企業サマリーをupsertする。
+
+    Args:
+        ticker: 証券コード（例: "7203"）
+        summary: generate_summary()の出力
+    """
+    collection = get_collection("companies")
+    collection.update_one(
+        {"ticker": ticker},
+        {"$set": {"ticker": ticker, "summary": summary.model_dump(), "updated_at": datetime.now(timezone.utc)}},
+        upsert=True,
+    )
