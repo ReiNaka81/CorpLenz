@@ -1,13 +1,9 @@
 from fastapi import APIRouter
-from pydantic import BaseModel
 from rag.retriever import retrieve
 from rag.chain import answer_with_context
+from models.models import ChatRequest
 
 router = APIRouter()
-
-class ChatRequest(BaseModel):   
-    query: str
-    ticker: str
 
 @router.post("/chat")
 def chat(req: ChatRequest): 
