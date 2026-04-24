@@ -89,4 +89,6 @@ def generate_summary(sections: list[dict]) -> CompanySummary:
         messages=[{"role": "user", "content": context}],
     )
 
+    print("サマリーを作成しました。")
+
     return response.parsed_output

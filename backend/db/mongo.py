@@ -70,3 +70,4 @@ def upsert_company(ticker: str, summary: CompanySummary) -> None:
         {"$set": {"ticker": ticker, "summary": summary.model_dump(), "updated_at": datetime.now(timezone.utc)}},
         upsert=True,
     )
+    print("サマリーをDBに保存しました。")
