@@ -18,7 +18,7 @@ export function MessageList({ messages }: MessageListProps) {
   }, [messages.length])
 
   return (
-    <ScrollArea className="flex-1 px-3 py-2">
+    <ScrollArea className="flex-1 min-h-0 px-3 py-2">
       {messages.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full gap-2 py-8">
           <Bot size={28} style={{ color: 'var(--vsc-text-muted)' }} />
