@@ -23,15 +23,18 @@ def insert_chunks(chunks: list[dict], collection_name: str = "chunks") -> None:
         chunks: chunker.split_text() の出力（[{"text": "...", "section": "...", "ticker": "...", "year": ...}, ...]）
         collection_name: 保存先コレクション名。"chunks" または "summaries"
     """
-    collection = get_collection(collection_name)
+    texts = [chunk["text"] for chunk in chunks]
+    voyage = get_voyage_client()
+    embeddings = voyage.embed(texts, model=EMBEDDING_MODEL, input_type="document").embeddings
+
     docs = []
-    for chunk in chunks:
+    for chunk, embedding in zip(chunks, embeddings):
         docs.append({
             "text": chunk["text"],
             "section": chunk["section"],
             "ticker": chunk["ticker"],
             "year": chunk["year"],
-            "embedding": get_embedding(chunk["text"]),
+            "embedding": embedding,
         })
-    collection.insert_many(docs)
+    get_collection(collection_name).insert_many(docs)
     print(f"{len(docs)}件を {collection_name} に保存しました。")
