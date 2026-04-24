@@ -16,6 +16,8 @@ def get_embedding(data, input_type="document"):
     ).embeddings
     return embeddings[0]
 
+BATCH_SIZE = 128
+
 def insert_chunks(chunks: list[dict], collection_name: str = "chunks") -> None:
     """チャンクをベクトル化してMongoDBに保存する。
 
@@ -23,18 +25,22 @@ def insert_chunks(chunks: list[dict], collection_name: str = "chunks") -> None:
         chunks: chunker.split_text() の出力（[{"text": "...", "section": "...", "ticker": "...", "year": ...}, ...]）
         collection_name: 保存先コレクション名。"chunks" または "summaries"
     """
-    texts = [chunk["text"] for chunk in chunks]
     voyage = get_voyage_client()
-    embeddings = voyage.embed(texts, model=EMBEDDING_MODEL, input_type="document").embeddings
-
+    collection = get_collection(collection_name)
     docs = []
-    for chunk, embedding in zip(chunks, embeddings):
-        docs.append({
-            "text": chunk["text"],
-            "section": chunk["section"],
-            "ticker": chunk["ticker"],
-            "year": chunk["year"],
-            "embedding": embedding,
-        })
-    get_collection(collection_name).insert_many(docs)
+
+    for i in range(0, len(chunks), BATCH_SIZE):
+        batch = chunks[i: i + BATCH_SIZE]
+        texts = [chunk["text"] for chunk in batch]
+        embeddings = voyage.embed(texts, model=EMBEDDING_MODEL, input_type="document").embeddings
+        for chunk, embedding in zip(batch, embeddings):
+            docs.append({
+                "text": chunk["text"],
+                "section": chunk["section"],
+                "ticker": chunk["ticker"],
+                "year": chunk["year"],
+                "embedding": embedding,
+            })
+
+    collection.insert_many(docs)
     print(f"{len(docs)}件を {collection_name} に保存しました。")
