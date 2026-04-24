@@ -2,10 +2,14 @@ from pathlib import Path
 from ingestion.html_parser import parse_ixbrl
 from ingestion.chunker import split_text
 from ingestion.embedding import insert_chunks
+from ingestion.xbrl_parser import parse_xbrl
+from ingestion.summarizer import generate_summary
+from db.mongo import create_vector_index
+from db.mongo import upsert_company
 
 
 def ingest(zip_path: str | Path, ticker: str, year: int) -> None:
-    """XBRL ZIPを取り込み、チャンク化してMongoDBに保存する。
+    """XBRL ZIPを取り込み、チャンク化・財務数値・企業サマリーをMongoDBに保存する。
 
     Args:
         zip_path: XBRL ZIPファイルのパス
@@ -15,6 +19,10 @@ def ingest(zip_path: str | Path, ticker: str, year: int) -> None:
     sections = parse_ixbrl(zip_path)
     chunks = split_text(sections, ticker, year)
     insert_chunks(chunks)
+    create_vector_index("chunks")
+    parse_xbrl(zip_path, ticker, year)
+    summary = generate_summary(sections)
+    upsert_company(ticker, summary)
 
 
 if __name__ == "__main__":
