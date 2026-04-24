@@ -15,7 +15,7 @@ export function CompanyItem({ company, isActive, onClick }: CompanyItemProps) {
       className="relative flex items-center w-full gap-2 px-4 py-1.5 text-left text-sm transition-colors cursor-pointer"
       style={{
         backgroundColor: isActive ? 'var(--vsc-selection)' : 'transparent',
-        color: isActive ? '#ffffff' : 'var(--vsc-text)',
+        color: 'var(--vsc-text)',
       }}
       onMouseEnter={(e) => {
         if (!isActive) (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--vsc-hover)'

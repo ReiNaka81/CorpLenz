@@ -59,19 +59,52 @@
 }
 
 :root {
-  --vsc-editor: #1e1e1e;
-  --vsc-sidebar: #252526;
-  --vsc-activity-bar: #333333;
-  --vsc-title-bar: #3c3c3c;
+  --background: #ffffff;
+  --foreground: #09090b;
+  --card: #ffffff;
+  --card-foreground: #09090b;
+  --popover: #ffffff;
+  --popover-foreground: #09090b;
+  --primary: #0078d4;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --accent: #e8f0fe;
+  --accent-foreground: #18181b;
+  --destructive: #ef4444;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #0078d4;
+  --radius: 0.25rem;
+  --chart-1: #0ea5e9;
+  --chart-2: #22c55e;
+  --chart-3: #f59e0b;
+  --chart-4: #ec4899;
+  --chart-5: #a855f7;
+  --sidebar: #f8f8f8;
+  --sidebar-foreground: #18181b;
+  --sidebar-primary: #0078d4;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e4e4e7;
+  --sidebar-accent-foreground: #18181b;
+  --sidebar-border: #e4e4e7;
+  --sidebar-ring: #0078d4;
+
+  --vsc-editor: #ffffff;
+  --vsc-sidebar: #f3f3f3;
+  --vsc-activity-bar: #ebebeb;
+  --vsc-title-bar: #dddddd;
   --vsc-status-bar: #007acc;
-  --vsc-tab-active: #1e1e1e;
-  --vsc-tab-inactive: #2d2d2d;
-  --vsc-border: #3e3e42;
+  --vsc-tab-active: #ffffff;
+  --vsc-tab-inactive: #ececec;
+  --vsc-border: #e4e4e7;
   --vsc-accent: #0078d4;
-  --vsc-text: #d4d4d4;
-  --vsc-text-muted: #858585;
-  --vsc-selection: #264f78;
-  --vsc-hover: #2a2d2e;
+  --vsc-text: #1f1f1f;
+  --vsc-text-muted: #71717a;
+  --vsc-selection: #cce4f7;
+  --vsc-hover: #e8e8e8;
 }
 
 .dark {
@@ -107,6 +140,20 @@
   --sidebar-accent-foreground: #d4d4d4;
   --sidebar-border: #3e3e42;
   --sidebar-ring: #0078d4;
+
+  --vsc-editor: #1e1e1e;
+  --vsc-sidebar: #252526;
+  --vsc-activity-bar: #333333;
+  --vsc-title-bar: #3c3c3c;
+  --vsc-status-bar: #007acc;
+  --vsc-tab-active: #1e1e1e;
+  --vsc-tab-inactive: #2d2d2d;
+  --vsc-border: #3e3e42;
+  --vsc-accent: #0078d4;
+  --vsc-text: #d4d4d4;
+  --vsc-text-muted: #858585;
+  --vsc-selection: #264f78;
+  --vsc-hover: #2a2d2e;
 }
 
 @layer base {
@@ -130,9 +177,9 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #424242;
+  background: #d4d4d8;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #a1a1aa;
 }

@@ -28,22 +28,24 @@ export function BusinessSection({ data }: BusinessSectionProps) {
         {data.description}
       </p>
 
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         <span className="text-xs" style={{ color: 'var(--vsc-text-muted)' }}>セグメント別売上構成</span>
         {data.segments.map((seg) => (
-          <div key={seg.name} className="flex items-center gap-2">
-            <span className="text-xs w-36 shrink-0 truncate" style={{ color: 'var(--vsc-text)' }}>
-              {seg.name}
-            </span>
-            <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--vsc-border)' }}>
+          <div key={seg.name} className="space-y-0.5">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs" style={{ color: 'var(--vsc-text)' }}>
+                {seg.name}
+              </span>
+              <span className="text-xs tabular-nums shrink-0" style={{ color: 'var(--vsc-text-muted)' }}>
+                {Math.round(seg.revenue_ratio * 100)}%
+              </span>
+            </div>
+            <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--vsc-border)' }}>
               <div
                 className="h-full rounded-full"
                 style={{ width: `${seg.revenue_ratio * 100}%`, backgroundColor: 'var(--vsc-accent)' }}
               />
             </div>
-            <span className="text-xs tabular-nums w-8 text-right" style={{ color: 'var(--vsc-text-muted)' }}>
-              {Math.round(seg.revenue_ratio * 100)}%
-            </span>
           </div>
         ))}
       </div>

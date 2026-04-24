@@ -64,17 +64,19 @@ export function HumanCapitalSection({ data }: HumanCapitalSectionProps) {
         />
       </div>
 
-      <div className="flex items-center gap-3">
-        <span className="text-xs" style={{ color: 'var(--vsc-text-muted)' }}>女性管理職比率</span>
-        <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--vsc-border)' }}>
+      <div className="space-y-0.5">
+        <div className="flex items-center justify-between">
+          <span className="text-xs" style={{ color: 'var(--vsc-text-muted)' }}>女性管理職比率</span>
+          <span className="text-xs font-semibold tabular-nums" style={{ color: 'var(--vsc-text)' }}>
+            {data.female_manager_ratio}%
+          </span>
+        </div>
+        <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--vsc-border)' }}>
           <div
             className="h-full rounded-full"
             style={{ width: `${Math.min(data.female_manager_ratio, 100)}%`, backgroundColor: 'var(--vsc-accent)' }}
           />
         </div>
-        <span className="text-xs font-semibold tabular-nums w-10 text-right" style={{ color: 'var(--vsc-text)' }}>
-          {data.female_manager_ratio}%
-        </span>
       </div>
 
       <p className="text-xs leading-relaxed" style={{ color: 'var(--vsc-text-muted)' }}>

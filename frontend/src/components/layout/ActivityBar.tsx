@@ -1,6 +1,7 @@
 'use client'
 
-import { Building2, Search, GitCompare, Bookmark, Settings } from 'lucide-react'
+import { Building2, Search, GitCompare, Bookmark, Sun, Moon } from 'lucide-react'
+import { useTheme } from 'next-themes'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 const topItems = [
@@ -16,6 +17,8 @@ interface ActivityBarProps {
 }
 
 export function ActivityBar({ activeItem = '企業一覧', onSelect }: ActivityBarProps) {
+  const { theme, setTheme } = useTheme()
+
   return (
     <div
       className="flex flex-col items-center w-12 shrink-0 py-2 gap-1"
@@ -27,7 +30,7 @@ export function ActivityBar({ activeItem = '企業一覧', onSelect }: ActivityB
             <TooltipTrigger
               onClick={() => onSelect?.(label)}
               className="relative flex items-center justify-center w-12 h-12 cursor-pointer transition-colors bg-transparent border-0"
-              style={{ color: activeItem === label ? '#ffffff' : '#858585' }}
+              style={{ color: activeItem === label ? 'var(--vsc-accent)' : 'var(--vsc-text-muted)' }}
             >
               {activeItem === label && (
                 <span
@@ -44,12 +47,15 @@ export function ActivityBar({ activeItem = '企業一覧', onSelect }: ActivityB
 
       <Tooltip>
         <TooltipTrigger
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           className="flex items-center justify-center w-12 h-12 cursor-pointer transition-colors bg-transparent border-0"
-          style={{ color: '#858585' }}
+          style={{ color: 'var(--vsc-text-muted)' }}
         >
-          <Settings size={22} />
+          {theme === 'dark' ? <Sun size={22} /> : <Moon size={22} />}
         </TooltipTrigger>
-        <TooltipContent side="right">設定</TooltipContent>
+        <TooltipContent side="right">
+          {theme === 'dark' ? 'ライトモード' : 'ダークモード'}
+        </TooltipContent>
       </Tooltip>
     </div>
   )
