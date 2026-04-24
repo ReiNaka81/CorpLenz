@@ -24,7 +24,7 @@ export function ChatInput({ value, onChange, onSend, disabled }: ChatInputProps)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
       e.preventDefault()
       handleSend()
     }
@@ -47,7 +47,7 @@ export function ChatInput({ value, onChange, onSend, disabled }: ChatInputProps)
         value={value}
         onChange={handleInput}
         onKeyDown={handleKeyDown}
-        placeholder="質問を入力... (Enter で送信)"
+        placeholder="質問を入力... (⌘Enter で送信)"
         disabled={disabled}
         rows={1}
         className="resize-none text-xs min-h-[32px] max-h-[80px] border-0 focus-visible:ring-1 py-2"
