@@ -31,7 +31,7 @@ export function KPICard({ label, value, sub, trend }: KPICardProps) {
           {trend !== undefined && (
             <span
               className="text-xs font-medium"
-              style={{ color: isPositive ? '#4ade80' : '#f87171' }}
+              style={{ color: isPositive ? '#34d399' : '#f87171' }}
             >
               {isPositive ? '+' : ''}{trend.toFixed(1)}%
             </span>
