@@ -72,7 +72,7 @@ export function CompanyDetail({ company }: CompanyDetailProps) {
         {financials ? (
           <>
             <KPIGrid financials={financials} />
-            <FinancialCharts financials={financials} companyColor={company.color} />
+            <FinancialCharts financials={financials} companyColor="#0078d4" />
             <FinancialTable financials={financials} />
           </>
         ) : (
