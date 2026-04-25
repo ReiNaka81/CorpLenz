@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { TitleBar } from './TitleBar'
 import { ActivityBar } from './ActivityBar'
 import { Sidebar } from '@/components/sidebar/Sidebar'
@@ -9,9 +9,26 @@ import { TabBar } from '@/components/main/TabBar'
 import { CompanyDetail } from '@/components/main/company/CompanyDetail'
 import { ChatPanel } from '@/components/chat/ChatPanel'
 import { useAppStore } from '@/store/appStore'
+import { tickerToColor } from '@/lib/utils'
 
 export function AppLayout() {
-  const { selectedCompany, splitEnabled, rightPaneCompany, setActivePane, chatOpen, setChatOpen } = useAppStore()
+  const { selectedCompany, splitEnabled, rightPaneCompany, setActivePane, chatOpen, setChatOpen, setCompanies } = useAppStore()
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/companies`)
+      .then((res) => res.json())
+      .then((data) => {
+        const companies = data.companies.map((c: { ticker: string; name: string; sector: string }) => ({
+          id: c.ticker,
+          ticker: c.ticker,
+          name: c.name,
+          sector: c.sector,
+          color: tickerToColor(c.ticker),
+        }))
+        setCompanies(companies)
+      })
+      .catch(() => {})
+  }, [])
   const [activeItem, setActiveItem] = useState('企業一覧')
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [sidebarWidth, setSidebarWidth] = useState(240)

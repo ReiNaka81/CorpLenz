@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { mockCompanies } from '@/data/mockCompanies'
+import { useAppStore } from '@/store/appStore'
 
 export function StatusBar() {
+  const { companies } = useAppStore()
   const [time, setTime] = useState('')
 
   useEffect(() => {
@@ -25,7 +26,7 @@ export function StatusBar() {
           <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse inline-block" />
           接続済み
         </span>
-        <span>{mockCompanies.length} 社ロード済み</span>
+        <span>{companies.length} 社ロード済み</span>
         {time && <span>最終更新: {time}</span>}
       </div>
       <div className="flex items-center gap-4">

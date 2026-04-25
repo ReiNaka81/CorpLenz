@@ -1,16 +1,17 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useMemo } from 'react'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { mockCompanies } from '@/data/mockCompanies'
 import { useAppStore } from '@/store/appStore'
 
-const sectors = ['すべて', ...Array.from(new Set(mockCompanies.map((c) => c.sector)))]
-
 export function SearchBar() {
-  const { searchQuery, activeFilter, setSearchQuery, setActiveFilter } = useAppStore()
+  const { companies, searchQuery, activeFilter, setSearchQuery, setActiveFilter } = useAppStore()
+  const sectors = useMemo(
+    () => ['すべて', ...Array.from(new Set(companies.map((c) => c.sector)))],
+    [companies]
+  )
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
