@@ -133,15 +133,7 @@ export function ChatPanel({ company, width, isOpen, onToggle, onWidthChange }: C
         </div>
       </div>
 
-      <MessageList messages={messages} />
-
-      {loading && (
-        <div className="px-4 py-1">
-          <span className="text-xs" style={{ color: 'var(--vsc-text-muted)' }}>
-            分析中...
-          </span>
-        </div>
-      )}
+      <MessageList messages={messages} loading={loading} />
 
       <ChatInput value={inputValue} onChange={setInputValue} onSend={handleSend} disabled={!company || loading} />
     </div>
