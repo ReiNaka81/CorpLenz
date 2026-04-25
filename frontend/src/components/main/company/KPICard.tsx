@@ -33,7 +33,7 @@ export function KPICard({ label, value, sub, trend }: KPICardProps) {
               className="text-xs font-medium"
               style={{ color: isPositive ? '#34d399' : '#f87171' }}
             >
-              {isPositive ? '+' : ''}{trend.toFixed(1)}%
+              前年比 {isPositive ? '+' : ''}{trend.toFixed(1)}%
             </span>
           )}
         </div>
