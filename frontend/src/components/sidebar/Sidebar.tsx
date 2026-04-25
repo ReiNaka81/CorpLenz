@@ -43,7 +43,7 @@ export function Sidebar({ width, isOpen, onToggle, onWidthChange }: SidebarProps
         searchQuery === '' || c.name.includes(searchQuery) || c.ticker.includes(searchQuery)
       return matchFilter && matchSearch
     })
-  }, [searchQuery, activeFilter])
+  }, [companies, searchQuery, activeFilter])
 
   const bySector = useMemo(() => {
     const map = new Map<string, Company[]>()
