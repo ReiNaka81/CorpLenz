@@ -57,7 +57,7 @@ def _download_file(doc_id: str, file_type: int, save_path: Path) -> Path:
     return save_path
 
 
-def fetch_company_report(sec_code: str, year: int) -> dict:
+def fetch_company_report(ticker: str, year: int) -> dict:
     """
     指定企業の有価証券報告書PDFとXBRLを取得してローカルに保存する
 
@@ -69,32 +69,36 @@ def fetch_company_report(sec_code: str, year: int) -> dict:
         保存先パスなどのメタ情報
     """
     # EDINETの証券コードは5桁（末尾に0を付加）
-    edinet_sec_code = sec_code + "0"
+    edinet_sec_code = ticker + "0"
 
     # 有価証券報告書の提出期間（対象年度の4月〜翌年3月）
     start_date = f"{year}-04-01"
     end_date = f"{year + 1}-03-31"
 
-    print(f"[{sec_code}] {year}年度 有価証券報告書を検索中... ({start_date} ~ {end_date})")
+    print(f"有価証券報告書を検索中... ({start_date} ~ {end_date})")
     doc = _find_annual_report(edinet_sec_code, start_date, end_date)
 
     if not doc:
-        raise ValueError(f"有価証券報告書が見つかりませんでした: secCode={sec_code}, year={year}")
+        raise ValueError(f"有価証券報告書が見つかりませんでした: secCode={ticker}, year={year}")
 
     doc_id = doc["docID"]
     company_name = doc["filerName"]
-    print(f"[{sec_code}] 書類発見: 会社名 = {company_name}, 提出日 = {doc.get('submitDateTime', '')}")
+    print(f"書類発見: 会社名 = {company_name}, 提出日 = {doc.get('submitDateTime', '')}")
 
     save_dir = SAVE_DIR / company_name / str(year)
     save_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"[{sec_code}] PDFをダウンロード中...")
+    print(f"PDFをダウンロード中...")
     pdf_path = _download_file(doc_id, file_type=2, save_path=save_dir / f"{company_name}.pdf")
 
-    print(f"[{sec_code}] XBRLをダウンロード中...")
+    print(f"XBRLをダウンロード中...")
     xbrl_path = _download_file(doc_id, file_type=1, save_path=save_dir / f"{company_name}_xbrl.zip")
 
     print(f"{company_name}のXBRLとPDFの保存が完了しました。")
+
+    return {
+        "company_name": company_name,
+    }
 
 
 if __name__ == "__main__":
