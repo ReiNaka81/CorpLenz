@@ -1,3 +1,4 @@
+import csv
 import os
 import requests
 from datetime import datetime, timedelta
@@ -8,6 +9,19 @@ EDINET_API_KEY = os.getenv("EDINET_API_KEY")
 BASE_URL = "https://api.edinet-fsa.go.jp//api/v2"
 SAVE_DIR = Path(__file__).parent.parent / "data"    # backend/dataを指定
 
+SECTOR_CSV = Path(__file__).parent.parent / "data" / "sector_map.csv"
+
+def load_sector_map() -> dict[str, str]:
+    sector_map = {}
+    with open(SECTOR_CSV, encoding="utf-8", newline="") as f:
+        reader = csv.reader(f)
+        next(reader)  # ヘッダースキップ
+        for row in reader:
+            if len(row) >= 2:
+                sector_map[row[0]] = row[1]
+    return sector_map
+
+SECTOR_MAP = load_sector_map()
 
 def _get_documents_by_date(date: str) -> list[dict]:
     """指定日の提出書類一覧を取得"""
@@ -34,7 +48,8 @@ def _find_annual_report(sec_code: str, start_date: str, end_date: str) -> dict |
         for doc in docs:
             if (
                 doc.get("secCode") == sec_code
-                and doc.get("formCode") == "030000"  # 有価証券報告書
+                and doc.get("formCode") == "030000"
+                and doc.get("docTypeCode") == "120"  # 有価証券報告書（大量保有報告書等を除外）
             ):
                 return doc
 
@@ -84,22 +99,26 @@ def fetch_company_report(ticker: str, year: int) -> dict:
 
     doc_id = doc["docID"]
     company_name = doc["filerName"]
+    edinet_code = doc["edinetCode"]
+    sector = SECTOR_MAP.get(edinet_code, "その他")
+
     print(f"書類発見: 会社名 = {company_name}, 提出日 = {doc.get('submitDateTime', '')}")
 
     save_dir = SAVE_DIR / company_name / str(year)
     save_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"PDFをダウンロード中...")
-    pdf_path = _download_file(doc_id, file_type=2, save_path=save_dir / f"{company_name}.pdf")
+    _download_file(doc_id, file_type=2, save_path=save_dir / f"{company_name}.pdf")
 
     print(f"XBRLをダウンロード中...")
     xbrl_path = _download_file(doc_id, file_type=1, save_path=save_dir / f"{company_name}_xbrl.zip")
 
     print(f"{company_name}のXBRLとPDFの保存が完了しました。")
-
+    
     return {
         "company_name": company_name,
         "zip_path": xbrl_path,
+        "sector": sector,
     }
 
 

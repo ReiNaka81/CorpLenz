@@ -218,6 +218,7 @@ pyrightconfig.json
 
 # EDINET downloaded files (PDFs, XBRL)
 backend/data/
+!backend/data/sector_map.csv
 *.xbrl
 # Exclude downloaded PDFs but allow committed ones if any
 backend/**/*.pdf

@@ -51,5 +51,6 @@ class FinancialYear(BaseModel):
 
 class SummaryResponse(BaseModel):
     name: str                        # 会社名
+    sector: str                      # 業種（東証33業種）
     summary: CompanySummary          # LLM生成の企業サマリー
     financials: list[FinancialYear]  # XBRLから取得した財務データ（最大5年分）

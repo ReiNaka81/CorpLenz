@@ -18,6 +18,7 @@ def ingest(ticker: str, year: int) -> None:
     result = fetch_company_report(ticker, year)
     zip_path = result["zip_path"]
     name = result["company_name"]
+    sector = result["sector"]
 
     sections = parse_ixbrl(zip_path)
     chunks = split_text(sections, ticker, year)
@@ -25,7 +26,7 @@ def ingest(ticker: str, year: int) -> None:
     create_vector_index("chunks")
     parse_xbrl(zip_path, ticker, year)
     summary = generate_summary(sections)
-    upsert_company(ticker, name, summary)
+    upsert_company(ticker, name, sector, summary)
 
 
 if __name__ == "__main__":
