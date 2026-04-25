@@ -1,14 +1,27 @@
+import csv
 import os
 import requests
 from datetime import datetime, timedelta
 from pathlib import Path
 import time
-from ingestion.maps import INDUSTRY_MAP
 
 EDINET_API_KEY = os.getenv("EDINET_API_KEY")
 BASE_URL = "https://api.edinet-fsa.go.jp//api/v2"
 SAVE_DIR = Path(__file__).parent.parent / "data"    # backend/dataを指定
 
+SECTOR_CSV = Path(__file__).parent.parent / "data" / "sector_map.csv"
+
+def load_sector_map() -> dict[str, str]:
+    sector_map = {}
+    with open(SECTOR_CSV, encoding="utf-8", newline="") as f:
+        reader = csv.reader(f)
+        next(reader)  # ヘッダースキップ
+        for row in reader:
+            if len(row) >= 2:
+                sector_map[row[0]] = row[1]
+    return sector_map
+
+SECTOR_MAP = load_sector_map()
 
 def _get_documents_by_date(date: str) -> list[dict]:
     """指定日の提出書類一覧を取得"""
@@ -85,8 +98,8 @@ def fetch_company_report(ticker: str, year: int) -> dict:
 
     doc_id = doc["docID"]
     company_name = doc["filerName"]
-    sector_code = doc.get("industryCode", "")
-    sector = INDUSTRY_MAP.get(sector_code, "その他")
+    edinet_code = doc["edinetCode"]
+    sector = SECTOR_MAP.get(edinet_code, "その他")
 
     print(f"書類発見: 会社名 = {company_name}, 提出日 = {doc.get('submitDateTime', '')}")
 
