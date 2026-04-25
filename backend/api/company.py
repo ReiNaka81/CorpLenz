@@ -15,4 +15,4 @@ def get_summary(ticker: str):
     if not company_doc or not financials:
         raise HTTPException(status_code=404, detail=f"ticker {ticker} のデータが見つかりません")
 
-    return {"summary": company_doc["summary"], "financials": financials}
+    return {"name": company_doc["name"], "summary": company_doc["summary"], "financials": financials}

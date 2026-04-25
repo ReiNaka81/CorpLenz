@@ -50,5 +50,6 @@ class FinancialYear(BaseModel):
 
 
 class SummaryResponse(BaseModel):
-    summary: CompanySummary       # LLM生成の企業サマリー
+    name: str                        # 会社名
+    summary: CompanySummary          # LLM生成の企業サマリー
     financials: list[FinancialYear]  # XBRLから取得した財務データ（最大5年分）

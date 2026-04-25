@@ -72,17 +72,18 @@ def create_vector_index(collection_name: str):
     raise TimeoutError(f"vector indexが {INDEX_CREATION_TIMEOUT}秒以内に queryable にならなかった")
 
 
-def upsert_company(ticker: str, summary: CompanySummary) -> None:
+def upsert_company(ticker: str, name: str, summary: CompanySummary) -> None:
     """companiesコレクションに企業サマリーをupsertする。
 
     Args:
         ticker: 証券コード（例: "7203"）
+        name: 会社名（EDINETのfilerNameから取得）
         summary: generate_summary()の出力
     """
     collection = get_collection("companies")
     collection.update_one(
         {"ticker": ticker},
-        {"$set": {"ticker": ticker, "summary": summary.model_dump(), "updated_at": datetime.now(timezone.utc)}},
+        {"$set": {"ticker": ticker, "name": name, "summary": summary.model_dump(), "updated_at": datetime.now(timezone.utc)}},
         upsert=True,
     )
     print("サマリーをDBに保存しました。")
