@@ -82,28 +82,19 @@ def fetch_company_report(sec_code: str, year: int) -> dict:
         raise ValueError(f"有価証券報告書が見つかりませんでした: secCode={sec_code}, year={year}")
 
     doc_id = doc["docID"]
-    print(f"[{sec_code}] 書類発見: docID={doc_id}, 提出日={doc.get('submitDateTime', '')}")
-
     company_name = doc["filerName"]
+    print(f"[{sec_code}] 書類発見: 会社名 = {company_name}, 提出日 = {doc.get('submitDateTime', '')}")
+
     save_dir = SAVE_DIR / company_name / str(year)
     save_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"[{sec_code}] PDFをダウンロード中...")
-    pdf_path = _download_file(doc_id, file_type=2, save_path=save_dir / f"{doc_id}.pdf")
-    print(f"[{sec_code}] PDF保存: {pdf_path}")
+    pdf_path = _download_file(doc_id, file_type=2, save_path=save_dir / f"{company_name}.pdf")
 
     print(f"[{sec_code}] XBRLをダウンロード中...")
-    xbrl_path = _download_file(doc_id, file_type=1, save_path=save_dir / f"{doc_id}_xbrl.zip")
-    print(f"[{sec_code}] XBRL保存: {xbrl_path}")
+    xbrl_path = _download_file(doc_id, file_type=1, save_path=save_dir / f"{company_name}_xbrl.zip")
 
-    return {
-        "sec_code": sec_code,
-        "company_name": company_name,
-        "year": year,
-        "doc_id": doc_id,
-        "pdf_path": str(pdf_path),
-        "xbrl_path": str(xbrl_path),
-    }
+    print(f"{company_name}のXBRLとPDFの保存が完了しました。")
 
 
 if __name__ == "__main__":
@@ -114,5 +105,4 @@ if __name__ == "__main__":
     parser.add_argument("--year", type=int, required=True, help="対象年度（例: 2024）")
     args = parser.parse_args()
 
-    result = fetch_company_report(args.ticker, args.year)
-    print(result)
+    fetch_company_report(args.ticker, args.year)
