@@ -102,7 +102,7 @@ export function FinancialCharts({ financials, companyColor }: FinancialChartsPro
         title="純利益推移"
         latestLabel={`${latest.year}年: ${fmt(latest.net_profit)}円`}
         data={profitData}
-        color="#4fc3f7"
+        color="#0078d4"
       />
     </div>
   )
