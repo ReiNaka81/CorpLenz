@@ -3,9 +3,11 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Company, Message } from '@/types'
-import { mockCompanies } from '@/data/mockCompanies'
 
 interface AppStore {
+  companies: Company[]
+  setCompanies: (companies: Company[]) => void
+
   selectedCompany: Company | null
   openTabs: Company[]
   setSelectedCompany: (company: Company) => void
@@ -37,8 +39,11 @@ interface AppStore {
 export const useAppStore = create<AppStore>()(
   persist(
     (set, get) => ({
-      selectedCompany: mockCompanies[0],
-      openTabs: [mockCompanies[0]],
+      companies: [],
+      setCompanies: (companies) => set({ companies }),
+
+      selectedCompany: null,
+      openTabs: [],
       setSelectedCompany: (company) => {
         const tabs = get().openTabs
         const alreadyOpen = tabs.some((t) => t.id === company.id)

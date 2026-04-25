@@ -4,7 +4,6 @@ import { useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { mockCompanies } from '@/data/mockCompanies'
 import { useAppStore } from '@/store/appStore'
 import { SectorGroup } from './SectorGroup'
 import { Company } from '@/types'
@@ -22,6 +21,7 @@ interface SidebarProps {
 export function Sidebar({ width, isOpen, onToggle, onWidthChange }: SidebarProps) {
   const router = useRouter()
   const {
+    companies,
     selectedCompany, setSelectedCompany,
     splitEnabled, activePane, setRightPaneCompany,
     searchQuery, activeFilter,
@@ -37,13 +37,13 @@ export function Sidebar({ width, isOpen, onToggle, onWidthChange }: SidebarProps
   }
 
   const filtered = useMemo(() => {
-    return mockCompanies.filter((c) => {
+    return companies.filter((c) => {
       const matchFilter = activeFilter === 'すべて' || c.sector === activeFilter
       const matchSearch =
         searchQuery === '' || c.name.includes(searchQuery) || c.ticker.includes(searchQuery)
       return matchFilter && matchSearch
     })
-  }, [searchQuery, activeFilter])
+  }, [companies, searchQuery, activeFilter])
 
   const bySector = useMemo(() => {
     const map = new Map<string, Company[]>()

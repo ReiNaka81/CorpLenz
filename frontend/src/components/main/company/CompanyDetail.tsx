@@ -44,7 +44,7 @@ export function CompanyDetail({ company }: CompanyDetailProps) {
   return (
     <ScrollArea className="flex-1 min-h-0">
       <div className="p-4 space-y-6">
-        <CompanyHeader company={company} />
+        <CompanyHeader company={company} summary={summary} />
 
         {loading ? (
           <div className="text-xs py-2" style={{ color: 'var(--vsc-text-muted)' }}>
