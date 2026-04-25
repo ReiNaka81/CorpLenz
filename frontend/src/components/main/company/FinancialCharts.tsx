@@ -12,9 +12,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CompanyFinancials } from '@/types'
 
 function fmt(n: number) {
-  if (Math.abs(n) >= 100000) return `${(n / 100000).toFixed(1)}兆`
   if (Math.abs(n) >= 10000) return `${(n / 10000).toFixed(1)}兆`
-  return `${(n / 1000).toFixed(0)}千億`
+  if (Math.abs(n) >= 1000) return `${(n / 1000).toFixed(1)}千億`
+  return `${n.toFixed(0)}億`
 }
 
 interface SparklineCardProps {
@@ -86,24 +86,32 @@ interface FinancialChartsProps {
 }
 
 export function FinancialCharts({ financials, companyColor }: FinancialChartsProps) {
-  const revenueData = financials.years.map((y) => ({ year: y.year, value: y.revenue }))
-  const profitData = financials.years.map((y) => ({ year: y.year, value: y.net_profit }))
+  const revenueData = financials.years
+    .filter((y) => y.revenue !== null)
+    .map((y) => ({ year: y.year, value: y.revenue as number }))
+  const profitData = financials.years
+    .filter((y) => y.net_profit !== null)
+    .map((y) => ({ year: y.year, value: y.net_profit as number }))
   const latest = financials.years[financials.years.length - 1]
 
   return (
     <div className="grid grid-cols-2 gap-3">
-      <SparklineCard
-        title="売上高推移"
-        latestLabel={`${latest.year}年: ${fmt(latest.revenue)}円`}
-        data={revenueData}
-        color={companyColor}
-      />
-      <SparklineCard
-        title="純利益推移"
-        latestLabel={`${latest.year}年: ${fmt(latest.net_profit)}円`}
-        data={profitData}
-        color="#0078d4"
-      />
+      {revenueData.length > 0 && (
+        <SparklineCard
+          title="売上高推移"
+          latestLabel={`${latest.year}年: ${latest.revenue !== null ? fmt(latest.revenue) + '円' : '—'}`}
+          data={revenueData}
+          color={companyColor}
+        />
+      )}
+      {profitData.length > 0 && (
+        <SparklineCard
+          title="純利益推移"
+          latestLabel={`${latest.year}年: ${latest.net_profit !== null ? fmt(latest.net_profit) + '円' : '—'}`}
+          data={profitData}
+          color="#0078d4"
+        />
+      )}
     </div>
   )
 }

@@ -24,7 +24,6 @@ class HumanCapital(BaseModel):
 class BusinessSummary(BaseModel):
     description: str          # 事業内容の要約
     segments: list[Segment]   # セグメント別売上構成
-    rd_expense: int           # 研究開発費（億円）
     history_highlights: str   # 沿革のハイライト
 
 
@@ -32,7 +31,6 @@ class ManagementSummary(BaseModel):
     policy: str      # 経営方針
     challenges: str  # 対処すべき課題
     risks: str       # 主要な事業リスク
-    capex: int       # 設備投資額（億円）
 
 
 class CompanySummary(BaseModel):
@@ -42,11 +40,11 @@ class CompanySummary(BaseModel):
 
 
 class FinancialYear(BaseModel):
-    year: int          # 年度（例: 2026）
-    revenue: int       # 売上高（億円）
-    net_profit: int    # 純利益（億円）
-    equity: int        # 純資産（億円）
-    total_assets: int  # 総資産（億円）
+    year: int                # 年度（例: 2026）
+    revenue: int | None      # 売上高（億円）。銀行など業種によりNoneの場合あり
+    net_profit: int | None   # 純利益（億円）
+    equity: int | None       # 純資産（億円）
+    total_assets: int | None # 総資産（億円）
 
 
 class SummaryResponse(BaseModel):

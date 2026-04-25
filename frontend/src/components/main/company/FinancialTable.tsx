@@ -10,11 +10,13 @@ import {
 } from '@/components/ui/table'
 import { CompanyFinancials } from '@/types'
 
-function fmt(n: number) {
+function fmt(n: number | null) {
+  if (n === null) return '—'
   return n.toLocaleString('ja-JP')
 }
 
-function yoyPct(curr: number, prev: number) {
+function yoyPct(curr: number | null, prev: number | null) {
+  if (curr === null || prev === null || prev === 0) return null
   return ((curr - prev) / Math.abs(prev)) * 100
 }
 

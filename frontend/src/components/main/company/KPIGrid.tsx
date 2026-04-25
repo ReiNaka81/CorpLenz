@@ -3,14 +3,15 @@
 import { CompanyFinancials } from '@/types'
 import { KPICard } from './KPICard'
 
-function fmt(n: number) {
-  if (n >= 100000) return `${(n / 100000).toFixed(1)}兆円`
+function fmt(n: number | null) {
+  if (n === null) return '—'
   if (n >= 10000) return `${(n / 10000).toFixed(1)}兆円`
   if (n >= 1000) return `${(n / 1000).toFixed(1)}千億円`
   return `${n.toFixed(0)}億円`
 }
 
-function yoy(curr: number, prev: number) {
+function yoy(curr: number | null, prev: number | null) {
+  if (curr === null || prev === null || prev === 0) return undefined
   return ((curr - prev) / Math.abs(prev)) * 100
 }
 
@@ -23,7 +24,14 @@ export function KPIGrid({ financials }: KPIGridProps) {
   const latest = years[years.length - 1]
   const prev = years[years.length - 2]
 
-  const roe = prev ? (latest.net_profit / latest.equity) * 100 : undefined
+  const roe =
+    latest.net_profit !== null && latest.equity !== null && latest.equity !== 0
+      ? (latest.net_profit / latest.equity) * 100
+      : null
+  const prevRoe =
+    prev && prev.net_profit !== null && prev.equity !== null && prev.equity !== 0
+      ? (prev.net_profit / prev.equity) * 100
+      : null
 
   return (
     <div className="grid grid-cols-4 gap-3">
@@ -41,16 +49,9 @@ export function KPIGrid({ financials }: KPIGridProps) {
       />
       <KPICard
         label="ROE"
-        value={roe !== undefined ? `${roe.toFixed(1)}%` : '—'}
+        value={roe !== null ? `${roe.toFixed(1)}%` : '—'}
         sub="当期純利益 / 純資産"
-        trend={
-          prev
-            ? yoy(
-                (latest.net_profit / latest.equity) * 100,
-                (prev.net_profit / prev.equity) * 100
-              )
-            : undefined
-        }
+        trend={roe !== null && prevRoe !== null ? yoy(roe, prevRoe) : undefined}
       />
       <KPICard
         label="純資産"
