@@ -66,7 +66,8 @@ def fetch_company_report(ticker: str, year: int) -> dict:
         year: 対象年度（例: 2024）
 
     Returns:
-        保存先パスなどのメタ情報
+        company_name: 会社名
+        zip_path: xbrl.zipの保存先
     """
     # EDINETの証券コードは5桁（末尾に0を付加）
     edinet_sec_code = ticker + "0"
@@ -98,6 +99,7 @@ def fetch_company_report(ticker: str, year: int) -> dict:
 
     return {
         "company_name": company_name,
+        "zip_path": xbrl_path,
     }
 
 
