@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { Building2, Search, GitCompare, Bookmark, Sun, Moon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
@@ -18,6 +19,8 @@ interface ActivityBarProps {
 
 export function ActivityBar({ activeItem = '企業一覧', onSelect }: ActivityBarProps) {
   const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
   return (
     <div
@@ -51,10 +54,10 @@ export function ActivityBar({ activeItem = '企業一覧', onSelect }: ActivityB
           className="flex items-center justify-center w-12 h-12 cursor-pointer transition-colors bg-transparent border-0"
           style={{ color: 'var(--vsc-text-muted)' }}
         >
-          {theme === 'dark' ? <Sun size={22} /> : <Moon size={22} />}
+          {mounted && (theme === 'dark' ? <Sun size={22} /> : <Moon size={22} />)}
         </TooltipTrigger>
         <TooltipContent side="right">
-          {theme === 'dark' ? 'ライトモード' : 'ダークモード'}
+          {mounted && (theme === 'dark' ? 'ライトモード' : 'ダークモード')}
         </TooltipContent>
       </Tooltip>
     </div>
