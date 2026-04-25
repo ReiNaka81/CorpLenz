@@ -3,6 +3,7 @@ import requests
 from datetime import datetime, timedelta
 from pathlib import Path
 import time
+from ingestion.maps import INDUSTRY_MAP
 
 EDINET_API_KEY = os.getenv("EDINET_API_KEY")
 BASE_URL = "https://api.edinet-fsa.go.jp//api/v2"
@@ -84,13 +85,16 @@ def fetch_company_report(ticker: str, year: int) -> dict:
 
     doc_id = doc["docID"]
     company_name = doc["filerName"]
+    sector_code = doc.get("industryCode", "")
+    sector = INDUSTRY_MAP.get(sector_code, "その他")
+
     print(f"書類発見: 会社名 = {company_name}, 提出日 = {doc.get('submitDateTime', '')}")
 
     save_dir = SAVE_DIR / company_name / str(year)
     save_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"PDFをダウンロード中...")
-    pdf_path = _download_file(doc_id, file_type=2, save_path=save_dir / f"{company_name}.pdf")
+    _download_file(doc_id, file_type=2, save_path=save_dir / f"{company_name}.pdf")
 
     print(f"XBRLをダウンロード中...")
     xbrl_path = _download_file(doc_id, file_type=1, save_path=save_dir / f"{company_name}_xbrl.zip")
@@ -100,6 +104,7 @@ def fetch_company_report(ticker: str, year: int) -> dict:
     return {
         "company_name": company_name,
         "zip_path": xbrl_path,
+        "sector": sector,
     }
 
 
