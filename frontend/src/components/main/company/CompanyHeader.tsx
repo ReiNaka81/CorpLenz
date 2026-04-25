@@ -1,37 +1,24 @@
 'use client'
 
-import { MapPin, Users, Building2 } from 'lucide-react'
+import { Users, Building2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { Company } from '@/types'
-
-const companyMeta: Record<string, { location: string; employees: string; industry: string }> = {
-  '7203': { location: '愛知県豊田市', employees: '375,235名', industry: '自動車製造' },
-  '6758': { location: '東京都港区', employees: '113,000名', industry: '電気機器' },
-  '6501': { location: '東京都千代田区', employees: '280,000名', industry: '電気機器' },
-  '4307': { location: '東京都千代田区', employees: '13,000名', industry: 'ITサービス' },
-  '9613': { location: '東京都江東区', employees: '195,000名', industry: '情報通信' },
-  '9984': { location: '東京都港区', employees: '53,773名', industry: 'IT投資' },
-  '6861': { location: '大阪府大阪市', employees: '10,975名', industry: '計測・制御機器' },
-  '6954': { location: '山梨県忍野村', employees: '8,249名', industry: 'FA機器' },
-  '8306': { location: '東京都千代田区', employees: '120,000名', industry: '銀行業' },
-  '8035': { location: '東京都港区', employees: '15,100名', industry: '半導体製造装置' },
-}
+import { Company, CompanySummary } from '@/types'
 
 interface CompanyHeaderProps {
   company: Company
+  summary: CompanySummary | null
 }
 
 function getInitial(name: string) {
   return name.charAt(0)
 }
 
-export function CompanyHeader({ company }: CompanyHeaderProps) {
-  const meta = companyMeta[company.ticker] ?? {
-    location: '—',
-    employees: '—',
-    industry: '—',
-  }
+function formatEmployees(n: number): string {
+  if (n >= 10000) return `${(n / 10000).toFixed(1)}万名`
+  return `${n.toLocaleString()}名`
+}
 
+export function CompanyHeader({ company, summary }: CompanyHeaderProps) {
   return (
     <div
       className="flex items-start gap-4 p-4 rounded-lg border"
@@ -57,17 +44,15 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
           </Badge>
         </div>
         <div className="flex items-center gap-4 mt-1 text-xs flex-wrap" style={{ color: 'var(--vsc-text-muted)' }}>
-          <span className="flex items-center gap-1">
-            <MapPin size={11} />
-            {meta.location}
-          </span>
-          <span className="flex items-center gap-1">
-            <Users size={11} />
-            {meta.employees}
-          </span>
+          {summary && (
+            <span className="flex items-center gap-1">
+              <Users size={11} />
+              {formatEmployees(summary.human_capital.employee_count_consolidated)}
+            </span>
+          )}
           <span className="flex items-center gap-1">
             <Building2 size={11} />
-            {meta.industry}
+            {company.sector}
           </span>
         </div>
       </div>
