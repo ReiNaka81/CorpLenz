@@ -3,7 +3,7 @@ import zipfile
 from pathlib import Path
 from bs4 import BeautifulSoup
 from markdownify import markdownify
-from ingestion.section_map import SECTION_MAP
+from ingestion.maps import SECTION_MAP
 
 
 # 本文ファイルのプレフィックス（ヘッダー・監査報告書は除外）
