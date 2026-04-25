@@ -48,7 +48,8 @@ def _find_annual_report(sec_code: str, start_date: str, end_date: str) -> dict |
         for doc in docs:
             if (
                 doc.get("secCode") == sec_code
-                and doc.get("formCode") == "030000"  # 有価証券報告書
+                and doc.get("formCode") == "030000"
+                and doc.get("docTypeCode") == "120"  # 有価証券報告書（大量保有報告書等を除外）
             ):
                 return doc
 
@@ -113,7 +114,7 @@ def fetch_company_report(ticker: str, year: int) -> dict:
     xbrl_path = _download_file(doc_id, file_type=1, save_path=save_dir / f"{company_name}_xbrl.zip")
 
     print(f"{company_name}のXBRLとPDFの保存が完了しました。")
-
+    
     return {
         "company_name": company_name,
         "zip_path": xbrl_path,
