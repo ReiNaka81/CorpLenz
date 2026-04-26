@@ -48,17 +48,17 @@ export function KPIGrid({ financials }: KPIGridProps) {
         trend={prev ? yoy(latest.net_profit, prev.net_profit) : undefined}
       />
       <KPICard
+        label="自己資本"
+        value={fmt(latest.equity)}
+        sub={`${latest.year}年度`}
+        trend={prev ? yoy(latest.equity, prev.equity) : undefined}
+      />
+      <KPICard
         label="ROE"
         value={roe !== null ? `${roe.toFixed(1)}%` : '—'}
         sub=""
         tooltip="当期純利益 / 自己資本"
         trend={roe !== null && prevRoe !== null ? yoy(roe, prevRoe) : undefined}
-      />
-      <KPICard
-        label="自己資本"
-        value={fmt(latest.equity)}
-        sub={`${latest.year}年度`}
-        trend={prev ? yoy(latest.equity, prev.equity) : undefined}
       />
     </div>
   )
