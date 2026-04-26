@@ -1,15 +1,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Building2, Search, GitCompare, Bookmark, Sun, Moon } from 'lucide-react'
+import { Building2, GitCompare, Bookmark, Sun, Moon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 const topItems = [
-  { icon: Building2, label: '企業一覧' },
-  { icon: Search, label: '検索' },
-  { icon: GitCompare, label: '比較' },
-  { icon: Bookmark, label: 'ウォッチリスト' },
+  { icon: Building2, label: '企業一覧', disabled: false },
+  { icon: GitCompare, label: '比較（準備中）', disabled: true },
+  { icon: Bookmark, label: 'ウォッチリスト（準備中）', disabled: true },
 ]
 
 interface ActivityBarProps {
@@ -28,14 +27,18 @@ export function ActivityBar({ activeItem = '企業一覧', onSelect }: ActivityB
       style={{ backgroundColor: 'var(--vsc-activity-bar)' }}
     >
       <div className="flex flex-col items-center gap-1 flex-1">
-        {topItems.map(({ icon: Icon, label }) => (
+        {topItems.map(({ icon: Icon, label, disabled }) => (
           <Tooltip key={label}>
             <TooltipTrigger
-              onClick={() => onSelect?.(label)}
-              className="relative flex items-center justify-center w-12 h-12 cursor-pointer transition-colors bg-transparent border-0"
-              style={{ color: activeItem === label ? 'var(--vsc-accent)' : 'var(--vsc-text-muted)' }}
+              onClick={() => !disabled && onSelect?.(label)}
+              className="relative flex items-center justify-center w-12 h-12 transition-colors bg-transparent border-0"
+              style={{
+                color: disabled ? 'var(--vsc-text-muted)' : activeItem === label ? 'var(--vsc-accent)' : 'var(--vsc-text-muted)',
+                cursor: disabled ? 'not-allowed' : 'pointer',
+                opacity: disabled ? 0.4 : 1,
+              }}
             >
-              {activeItem === label && (
+              {activeItem === label && !disabled && (
                 <span
                   className="absolute left-0 top-0 h-full w-0.5"
                   style={{ backgroundColor: 'var(--vsc-accent)' }}
