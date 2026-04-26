@@ -36,16 +36,23 @@ export function BusinessSection({ data }: BusinessSectionProps) {
               <span className="text-xs" style={{ color: 'var(--vsc-text)' }}>
                 {seg.name}
               </span>
-              <span className="text-xs tabular-nums shrink-0" style={{ color: 'var(--vsc-text-muted)' }}>
-                {Math.round(seg.revenue_ratio * 100)}%
+              <span
+                className="text-xs tabular-nums shrink-0"
+                style={{ color: seg.revenue_ratio < 0 ? '#f87171' : 'var(--vsc-text-muted)' }}
+              >
+                {seg.revenue_ratio < 0
+                  ? `△${Math.abs(Math.round(seg.revenue_ratio * 100))}%`
+                  : `${Math.round(seg.revenue_ratio * 100)}%`}
               </span>
             </div>
-            <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--vsc-border)' }}>
-              <div
-                className="h-full rounded-full"
-                style={{ width: `${seg.revenue_ratio * 100}%`, backgroundColor: 'var(--vsc-accent)' }}
-              />
-            </div>
+            {seg.revenue_ratio >= 0 && (
+              <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--vsc-border)' }}>
+                <div
+                  className="h-full rounded-full"
+                  style={{ width: `${seg.revenue_ratio * 100}%`, backgroundColor: 'var(--vsc-accent)' }}
+                />
+              </div>
+            )}
           </div>
         ))}
       </div>
