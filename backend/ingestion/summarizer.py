@@ -1,9 +1,12 @@
 import os
+import json
 from anthropic import Anthropic
 from models.models import CompanySummary
 
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 CLAUDE_MODEL = os.getenv("CLAUDE_MODEL")
+DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
+DEEPSEEK_MODEL = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")
 
 # サマリー生成に使うセクション名（section_map.pyの値と対応）
 SUMMARY_SECTIONS = {
@@ -24,7 +27,8 @@ SYSTEM_PROMPT = """\
 - 数値はすべて報告書本文から読み取った値を使用する。記載がない場合は 0 を入れる
 - female_manager_ratio は持株会社等でグループ全体の数値がない場合、主要な子会社（銀行・証券等）の数値を使用する
 - average_salary は万円単位で返す
-- revenue_ratio は 0〜1 の小数で返す（例: 89% → 0.89）
+- revenue_ratio は 0〜1 の小数で返す（例: 89% → 0.89）。売上データが見つからない場合は純利益ベースの構成比で代替する
+- 赤字・損失のセグメントも含める。その場合は revenue_ratio をマイナス値で返す（例: -0.017）
 - テキストフィールドは日本語で簡潔にまとめる（commentary は3〜5文程度）
 
 ## 出力例（トヨタ自動車 2024年度）
@@ -68,19 +72,8 @@ def build_context(sections: list[dict]) -> str:
     return "\n\n".join(parts)
 
 
-def generate_summary(sections: list[dict]) -> CompanySummary:
-    """
-    有価証券報告書のセクションMarkdownからCompanySummaryを生成する。
-
-    Args:
-        sections: parse_ixbrl()の出力（list of {"section": str, "markdown": str}）
-    Returns:
-        CompanySummary
-    """
-    context = build_context(sections)
-
+def generate_with_claude(context: str) -> CompanySummary:
     client = Anthropic(api_key=ANTHROPIC_API_KEY)
-
     response = client.messages.parse(
         model=CLAUDE_MODEL,
         max_tokens=4096,
@@ -88,7 +81,42 @@ def generate_summary(sections: list[dict]) -> CompanySummary:
         output_format=CompanySummary,
         messages=[{"role": "user", "content": context}],
     )
-
-    print("サマリーを作成しました。")
-
     return response.parsed_output
+
+
+def generate_with_deepseek(context: str) -> CompanySummary:
+    client = Anthropic(
+        api_key=DEEPSEEK_API_KEY,
+        base_url="https://api.deepseek.com/anthropic",
+    )
+    response = client.messages.create(
+        model=DEEPSEEK_MODEL,
+        max_tokens=8192,
+        system=SYSTEM_PROMPT,
+        messages=[{"role": "user", "content": context}],
+    )
+    text = next(block.text for block in response.content if hasattr(block, "text"))
+    text = text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+    data = json.loads(text)
+    return CompanySummary.model_validate(data)
+
+
+def generate_summary(sections: list[dict], summarizer: str = "claude") -> CompanySummary:
+    """
+    有価証券報告書のセクションMarkdownからCompanySummaryを生成する。
+
+    Args:
+        sections: parse_ixbrl()の出力（list of {"section": str, "markdown": str}）
+        summarizer: "claude" or "deepseek"
+    Returns:
+        CompanySummary
+    """
+    context = build_context(sections)
+
+    if summarizer == "deepseek":
+        result = generate_with_deepseek(context)
+    else:
+        result = generate_with_claude(context)
+
+    print(f"サマリーを作成しました。({summarizer})")
+    return result
