@@ -1,6 +1,5 @@
 'use client'
 
-import { TrendingUp, TrendingDown } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 
 interface KPICardProps {
@@ -31,11 +30,10 @@ export function KPICard({ label, value, sub, trend }: KPICardProps) {
           </p>
           {trend !== undefined && (
             <span
-              className="flex items-center gap-0.5 text-xs font-medium"
-              style={{ color: isPositive ? '#4ade80' : '#f87171' }}
+              className="text-xs font-medium"
+              style={{ color: isPositive ? '#34d399' : '#f87171' }}
             >
-              {isPositive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-              {isPositive ? '+' : ''}{trend.toFixed(1)}%
+              前年比 {isPositive ? '+' : ''}{trend.toFixed(1)}%
             </span>
           )}
         </div>

@@ -24,7 +24,6 @@ export interface HumanCapital {
 export interface BusinessSummary {
   description: string
   segments: Segment[]
-  rd_expense: number  // 億円
   history_highlights: string
 }
 
@@ -32,7 +31,6 @@ export interface ManagementSummary {
   policy: string
   challenges: string
   risks: string
-  capex: number  // 億円
 }
 
 export interface CompanySummary {
@@ -43,10 +41,10 @@ export interface CompanySummary {
 
 export interface FinancialYear {
   year: number
-  revenue: number
-  net_profit: number
-  equity: number
-  total_assets: number
+  revenue: number | null
+  net_profit: number | null
+  equity: number | null
+  total_assets: number | null
 }
 
 export interface CompanyFinancials {

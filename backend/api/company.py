@@ -1,11 +1,12 @@
-from fastapi import APIRouter, HTTPException
+import re
+from fastapi import APIRouter, HTTPException, Query
 from models.models import SummaryResponse
 from db.mongo import get_collection
 
 router = APIRouter()
 
 @router.get("/company", response_model=SummaryResponse)
-def get_summary(ticker: str):
+def get_summary(ticker: str = Query(..., pattern=r"^\d{4,5}$")):
     companies_collection = get_collection("companies")
     financials_collection = get_collection("financials")
 

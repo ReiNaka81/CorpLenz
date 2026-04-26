@@ -10,11 +10,13 @@ import {
 } from '@/components/ui/table'
 import { CompanyFinancials } from '@/types'
 
-function fmt(n: number) {
+function fmt(n: number | null) {
+  if (n === null) return '—'
   return n.toLocaleString('ja-JP')
 }
 
-function yoyPct(curr: number, prev: number) {
+function yoyPct(curr: number | null, prev: number | null) {
+  if (curr === null || prev === null || prev === 0) return null
   return ((curr - prev) / Math.abs(prev)) * 100
 }
 
@@ -58,7 +60,7 @@ export function FinancialTable({ financials }: FinancialTableProps) {
               </TableHead>
             ))}
             <TableHead className="text-xs text-right" style={{ color: 'var(--vsc-text-muted)' }}>
-              YoY
+              前年比
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -99,7 +101,7 @@ export function FinancialTable({ financials }: FinancialTableProps) {
                   className="text-xs text-right tabular-nums font-medium"
                   style={{
                     color:
-                      pct === null ? 'var(--vsc-text-muted)' : pct >= 0 ? '#4ade80' : '#f87171',
+                      pct === null ? 'var(--vsc-text-muted)' : pct >= 0 ? '#34d399' : '#f87171',
                   }}
                 >
                   {pct !== null ? `${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%` : '—'}

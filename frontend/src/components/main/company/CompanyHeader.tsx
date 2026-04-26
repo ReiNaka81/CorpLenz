@@ -26,7 +26,7 @@ export function CompanyHeader({ company, summary }: CompanyHeaderProps) {
     >
       <div
         className="flex items-center justify-center w-12 h-12 rounded-lg text-white font-bold text-xl shrink-0"
-        style={{ backgroundColor: company.color }}
+        style={{ backgroundColor: 'var(--vsc-accent)' }}
       >
         {getInitial(company.name)}
       </div>

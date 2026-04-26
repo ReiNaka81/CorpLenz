@@ -8,14 +8,15 @@ import { Bot } from 'lucide-react'
 
 interface MessageListProps {
   messages: Message[]
+  loading?: boolean
 }
 
-export function MessageList({ messages }: MessageListProps) {
+export function MessageList({ messages, loading }: MessageListProps) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages.length])
+  }, [messages.length, loading])
 
   return (
     <ScrollArea className="flex-1 min-h-0 px-3 py-2">
@@ -31,6 +32,24 @@ export function MessageList({ messages }: MessageListProps) {
           {messages.map((msg, i) => (
             <MessageBubble key={i} message={msg} />
           ))}
+          {loading && (
+            <div className="flex items-end gap-2">
+              <div
+                className="flex items-center justify-center w-6 h-6 rounded-full shrink-0"
+                style={{ backgroundColor: 'var(--vsc-activity-bar)' }}
+              >
+                <Bot size={12} style={{ color: 'var(--vsc-text-muted)' }} />
+              </div>
+              <div
+                className="flex items-center gap-1 px-3 py-2 rounded-lg rounded-bl-none"
+                style={{ backgroundColor: 'var(--vsc-activity-bar)', border: '1px solid var(--vsc-border)' }}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-current animate-bounce [animation-delay:0ms]" style={{ color: 'var(--vsc-text-muted)' }} />
+                <span className="w-1.5 h-1.5 rounded-full bg-current animate-bounce [animation-delay:150ms]" style={{ color: 'var(--vsc-text-muted)' }} />
+                <span className="w-1.5 h-1.5 rounded-full bg-current animate-bounce [animation-delay:300ms]" style={{ color: 'var(--vsc-text-muted)' }} />
+              </div>
+            </div>
+          )}
           <div ref={bottomRef} />
         </div>
       )}

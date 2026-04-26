@@ -8,17 +8,19 @@ from db.mongo import get_collection
 # IFRS・J-GAAP共通で取得可能な項目のみ定義（営業利益はIFRSで標準タグなし）
 # キーワードは優先順に並べる（先頭ほど優先）
 METRIC_KEYWORDS = {
-    # 売上収益 / 売上高
-    "revenue":       ["NetSales", "Revenue", "OperatingRevenues"],
+    # 売上収益 / 売上高 / 経常収益
+    # OrdinaryIncomeBNK: 銀行の連結経常収益（直近2年のみ存在）
+    # OrdinaryIncome: 銀行の SummaryOfBusinessResults に5年分存在。非銀行は NetSales/Revenue が先に当たるので誤取得なし
+    "revenue":       ["NetSales", "Revenue", "OperatingRevenues", "OrdinaryRevenues", "OrdinaryIncomeBNK", "OrdinaryIncome"],
 
-    # 税引前利益（IFRS）/ 税引前当期純利益（J-GAAP）
-    "pretax_profit": ["ProfitLossBeforeTax", "OrdinaryIncome"],
+    # 税引前利益。OrdinaryIncome を最後にすることで銀行の OrdinaryIncomeSummaryOfBusinessResults（経常収益）を誤取得しない
+    "pretax_profit": ["ProfitLossBeforeTax", "IncomeBeforeIncomeTaxes", "OrdinaryIncome"],
 
     # 親会社帰属純利益
     "net_profit":    ["ProfitLossAttributableToOwnersOfParent", "NetIncome"],
 
-    # 総資産
-    "total_assets":  ["Assets"],
+    # 総資産（TotalAssets を先にして NetAssets を誤取得しない）
+    "total_assets":  ["TotalAssets", "Assets"],
 
     # 親会社株主持分 / 純資産
     "equity":        ["EquityAttributableToOwnersOfParent", "NetAssets", "Equity"],
@@ -91,6 +93,10 @@ def _keyword_priority(tag_name: str, keywords: list[str]) -> int:
     return len(keywords)
 
 
+def _is_summary(tag_name: str) -> bool:
+    return "SummaryOfBusinessResults" in tag_name or "KeyFinancialData" in tag_name
+
+
 def _extract_year(all_items: list[dict], duration_ctx: str, instant_ctx: str) -> dict:
     """1年分の財務数値を抽出する"""
     duration_items = [i for i in all_items if i["context"] == duration_ctx]
@@ -107,15 +113,16 @@ def _extract_year(all_items: list[dict], duration_ctx: str, instant_ctx: str) ->
     financials: dict = {"accounting_standard": accounting_standard}
     for metric, keywords in METRIC_KEYWORDS.items():
         pool = instant_items if metric in ("total_assets", "equity") else duration_items
+        # キーワード優先度を第1ソートキーにし、同優先度内のみ SummaryOfBusinessResults を優先する
+        # これにより銀行の OrdinaryIncomeSummaryOfBusinessResults（実態は経常収益）を誤取得しない
         candidates = sorted(
             [i for i in pool if _match_metric(i["name"], keywords)],
-            key=lambda i: _keyword_priority(i["name"], keywords),
+            key=lambda i: (
+                _keyword_priority(i["name"], keywords),
+                0 if _is_summary(i["name"]) else 1,
+            ),
         )
-        if candidates:
-            summary = [c for c in candidates if "SummaryOfBusinessResults" in c["name"] or "KeyFinancialData" in c["name"]]
-            financials[metric] = (summary or candidates)[0]["value"]
-        else:
-            financials[metric] = None
+        financials[metric] = candidates[0]["value"] if candidates else None
 
     return financials
 

@@ -50,17 +50,6 @@ export function BusinessSection({ data }: BusinessSectionProps) {
         ))}
       </div>
 
-      <div
-        className="flex items-center justify-between rounded-md px-3 py-2"
-        style={{ backgroundColor: 'var(--vsc-sidebar)', border: '1px solid var(--vsc-border)' }}
-      >
-        <span className="text-xs" style={{ color: 'var(--vsc-text-muted)' }}>研究開発費</span>
-        <span className="text-sm font-semibold tabular-nums" style={{ color: 'var(--vsc-text)' }}>
-          {data.rd_expense >= 10000
-            ? `${(data.rd_expense / 10000).toFixed(1)} 兆円`
-            : `${data.rd_expense.toLocaleString()} 億円`}
-        </span>
-      </div>
 
       <div className="space-y-1">
         <span className="text-xs" style={{ color: 'var(--vsc-text-muted)' }}>沿革</span>
