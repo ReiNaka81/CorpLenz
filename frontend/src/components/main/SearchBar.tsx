@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button'
 import { useAppStore } from '@/store/appStore'
 
 export function SearchBar() {
-  const { companies, searchQuery, activeFilter, setSearchQuery, setActiveFilter } = useAppStore()
+  const { companies, searchQuery, activeFilters, setSearchQuery, toggleFilter, clearFilters } = useAppStore()
   const [showFilter, setShowFilter] = useState(false)
   const sectors = useMemo(
-    () => ['すべて', ...Array.from(new Set(companies.map((c) => c.sector)))],
+    () => Array.from(new Set(companies.map((c) => c.sector))),
     [companies]
   )
   const inputRef = useRef<HTMLInputElement>(null)
@@ -62,16 +62,29 @@ export function SearchBar() {
 
       {showFilter && (
         <div className="flex flex-wrap gap-1 px-3 pb-2">
+            <Button
+              key="すべて"
+              variant="ghost"
+              size="sm"
+              onClick={clearFilters}
+              className="h-6 px-2 text-xs rounded-sm"
+              style={{
+                backgroundColor: activeFilters.length === 0 ? 'var(--vsc-accent)' : 'transparent',
+                color: activeFilters.length === 0 ? '#ffffff' : 'var(--vsc-text-muted)',
+              }}
+            >
+              すべて
+            </Button>
           {sectors.map((s) => (
             <Button
               key={s}
               variant="ghost"
               size="sm"
-              onClick={() => setActiveFilter(s)}
+              onClick={() => toggleFilter(s)}
               className="h-6 px-2 text-xs rounded-sm"
               style={{
-                backgroundColor: activeFilter === s ? 'var(--vsc-accent)' : 'transparent',
-                color: activeFilter === s ? '#ffffff' : 'var(--vsc-text-muted)',
+                backgroundColor: activeFilters.includes(s) ? 'var(--vsc-accent)' : 'transparent',
+                color: activeFilters.includes(s) ? '#ffffff' : 'var(--vsc-text-muted)',
               }}
             >
               {s}

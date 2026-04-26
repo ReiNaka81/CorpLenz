@@ -31,9 +31,10 @@ interface AppStore {
   setPendingQuestion: (q: string | null) => void
 
   searchQuery: string
-  activeFilter: string
+  activeFilters: string[]
   setSearchQuery: (q: string) => void
-  setActiveFilter: (f: string) => void
+  toggleFilter: (sector: string) => void
+  clearFilters: () => void
 }
 
 export const useAppStore = create<AppStore>()(
@@ -130,9 +131,17 @@ export const useAppStore = create<AppStore>()(
       setPendingQuestion: (q) => set({ pendingQuestion: q }),
 
       searchQuery: '',
-      activeFilter: 'すべて',
+      activeFilters: [],
       setSearchQuery: (q) => set({ searchQuery: q }),
-      setActiveFilter: (f) => set({ activeFilter: f }),
+      toggleFilter: (sector) => {
+        const filters = get().activeFilters
+        set({
+          activeFilters: filters.includes(sector)
+            ? filters.filter((f) => f !== sector)
+            : [...filters, sector],
+        })
+      },
+      clearFilters: () => set({ activeFilters: [] }),
     }),
     {
       name: 'corplens-storage',
