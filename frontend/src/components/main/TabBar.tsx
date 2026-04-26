@@ -63,7 +63,7 @@ export function TabBar({ pane }: TabBarProps) {
         })}
       </div>
 
-      {pane === 'left' && (
+      {((pane === 'left' && !splitEnabled) || (pane === 'right' && splitEnabled)) && (
         <button
           className="flex items-center justify-center w-9 h-9 shrink-0 border-l transition-colors hover:text-white"
           style={{
