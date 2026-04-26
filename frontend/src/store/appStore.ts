@@ -50,7 +50,7 @@ export const useAppStore = create<AppStore>()(
         const alreadyOpen = tabs.some((t) => t.id === company.id)
         set({
           selectedCompany: company,
-          openTabs: alreadyOpen ? tabs : [...tabs, company],
+          openTabs: alreadyOpen ? tabs : [company, ...tabs],
         })
       },
       closeTab: (id) => {
@@ -97,7 +97,7 @@ export const useAppStore = create<AppStore>()(
         const alreadyOpen = tabs.some((t) => t.id === company.id)
         set({
           rightPaneCompany: company,
-          rightPaneTabs: alreadyOpen ? tabs : [...tabs, company],
+          rightPaneTabs: alreadyOpen ? tabs : [company, ...tabs],
         })
       },
       closeRightPaneTab: (id) => {

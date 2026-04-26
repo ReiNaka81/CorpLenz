@@ -14,7 +14,7 @@ import { useAppStore } from '@/store/appStore'
 import { tickerToColor } from '@/lib/utils'
 
 export function AppLayout() {
-  const { selectedCompany, splitEnabled, rightPaneCompany, setActivePane, chatOpen, setChatOpen, setCompanies } = useAppStore()
+  const { selectedCompany, splitEnabled, rightPaneCompany, activePane, setActivePane, chatOpen, setChatOpen, setCompanies } = useAppStore()
 
   const [isMobile, setIsMobile] = useState(false)
   const [windowWidth, setWindowWidth] = useState(375)
@@ -142,7 +142,7 @@ export function AppLayout() {
               style={{ width: splitEnabled && !isMobile ? `${splitRatio * 100}%` : '100%' }}
               onClick={() => setActivePane('left')}
             >
-              <TabBar pane="left" />
+              <TabBar pane="left" isActive={activePane === 'left'} />
               {selectedCompany ? <CompanyDetail company={selectedCompany} /> : emptyState}
             </div>
 
@@ -158,7 +158,7 @@ export function AppLayout() {
                   className="flex flex-col overflow-hidden flex-1"
                   onClick={() => setActivePane('right')}
                 >
-                  <TabBar pane="right" />
+                  <TabBar pane="right" isActive={activePane === 'right'} />
                   {rightPaneCompany ? (
                     <CompanyDetail company={rightPaneCompany} />
                   ) : (
