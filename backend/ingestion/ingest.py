@@ -8,12 +8,13 @@ from db.mongo import create_vector_index
 from db.mongo import upsert_company
 
 
-def ingest(ticker: str, year: int) -> None:
+def ingest(ticker: str, year: int, summarizer: str) -> None:
     """EDINETからダウンロードしてチャンク化・財務数値・企業サマリーをMongoDBに保存する。
 
     Args:
         ticker: 対象企業の証券コード（例: "7203"）
         year: 対象年度（例: 2024）
+        summarizer: サマライザーのバックエンド（"claude" or "deepseek"）
     """
     result = fetch_company_report(ticker, year)
     zip_path = result["zip_path"]
@@ -25,7 +26,7 @@ def ingest(ticker: str, year: int) -> None:
     insert_chunks(chunks)
     create_vector_index("chunks")
     parse_xbrl(zip_path, ticker, year)
-    summary = generate_summary(sections)
+    summary = generate_summary(sections, summarizer=summarizer)
     upsert_company(ticker, name, sector, summary)
 
 
@@ -35,6 +36,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--ticker", required=True, help="証券コード（例: 7203）")
     parser.add_argument("--year", type=int, required=True, help="対象年度（例: 2024）")
+    parser.add_argument("--summarizer", required=True, choices=["claude", "deepseek"], help="サマライザーのバックエンド")
     args = parser.parse_args()
 
-    ingest(args.ticker, args.year)
+    ingest(args.ticker, args.year, summarizer=args.summarizer)

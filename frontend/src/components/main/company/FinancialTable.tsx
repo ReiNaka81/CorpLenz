@@ -36,7 +36,7 @@ export function FinancialTable({ financials }: FinancialTableProps) {
     { label: '売上高 (億円)', key: 'revenue' },
     { label: '純利益 (億円)', key: 'net_profit' },
     { label: '総資産 (億円)', key: 'total_assets' },
-    { label: '純資産 (億円)', key: 'equity' },
+    { label: '自己資本 (億円)', key: 'equity' },
   ]
 
   return (
