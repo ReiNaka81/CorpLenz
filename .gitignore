@@ -216,6 +216,9 @@ pyrightconfig.json
 !frontend/src/lib/
 
 
+# Clerk のローカルキャッシュ（シークレットを含む可能性あり）
+frontend/.clerk/
+
 # EDINET downloaded files (PDFs, XBRL)
 backend/data/
 !backend/data/sector_map.csv
