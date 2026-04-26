@@ -6,7 +6,7 @@ from db.mongo import get_collection
 router = APIRouter()
 
 @router.get("/company", response_model=SummaryResponse)
-def get_summary(ticker: str = Query(..., pattern=r"^\d{4,5}$")):
+def get_summary(ticker: str = Query(..., pattern=r"^[0-9A-Z]{4,5}$")):
     companies_collection = get_collection("companies")
     financials_collection = get_collection("financials")
 
