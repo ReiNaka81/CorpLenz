@@ -18,8 +18,8 @@ class ChatRequest(BaseModel):
     @field_validator("ticker")
     @classmethod
     def validate_ticker(cls, v: str) -> str:
-        if not re.fullmatch(r"\d{4,5}", v):
-            raise ValueError("tickerは4〜5桁の数字である必要があります")
+        if not re.fullmatch(r"[0-9A-Z]{4,5}", v):
+            raise ValueError("tickerは4〜5桁の英数字である必要があります")
         return v
 
 

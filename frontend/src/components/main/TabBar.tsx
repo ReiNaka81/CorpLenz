@@ -1,13 +1,15 @@
 'use client'
 
-import { X, Columns2 } from 'lucide-react'
+import { useRef, useState, useEffect, useCallback } from 'react'
+import { X, Columns2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useAppStore } from '@/store/appStore'
 
 interface TabBarProps {
   pane: 'left' | 'right'
+  isActive?: boolean
 }
 
-export function TabBar({ pane }: TabBarProps) {
+export function TabBar({ pane, isActive = false }: TabBarProps) {
   const {
     openTabs, selectedCompany, setSelectedCompany, closeTab,
     rightPaneTabs, rightPaneCompany, setRightPaneCompany, closeRightPaneTab,
@@ -19,15 +21,58 @@ export function TabBar({ pane }: TabBarProps) {
   const onSelect = pane === 'left' ? setSelectedCompany : setRightPaneCompany
   const onClose = pane === 'left' ? closeTab : closeRightPaneTab
 
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(false)
+
+  const updateScrollState = useCallback(() => {
+    const el = scrollRef.current
+    if (!el) return
+    setCanScrollLeft(el.scrollLeft > 0)
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1)
+  }, [])
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    updateScrollState()
+    el.addEventListener('scroll', updateScrollState)
+    const ro = new ResizeObserver(updateScrollState)
+    ro.observe(el)
+    return () => {
+      el.removeEventListener('scroll', updateScrollState)
+      ro.disconnect()
+    }
+  }, [tabs, updateScrollState])
+
+  const scroll = (dir: 'left' | 'right') => {
+    scrollRef.current?.scrollBy({ left: dir === 'left' ? -120 : 120, behavior: 'smooth' })
+  }
+
   if (tabs.length === 0) return null
 
   return (
     <div
       className="flex items-end shrink-0 border-b"
-      style={{ backgroundColor: 'var(--vsc-tab-inactive)', borderColor: 'var(--vsc-border)' }}
+      style={{
+        backgroundColor: 'var(--vsc-tab-inactive)',
+        borderColor: 'var(--vsc-border)',
+        boxShadow: isActive ? 'inset 0 2px 0 var(--vsc-accent)' : 'none',
+      }}
       onClick={() => setActivePane(pane)}
     >
-      <div className="flex items-end flex-1 overflow-x-auto">
+      {/* 左スクロール矢印 */}
+      {canScrollLeft && (
+        <button
+          className="flex items-center justify-center w-6 h-9 shrink-0 transition-colors hover:text-white"
+          style={{ color: 'var(--vsc-text-muted)' }}
+          onClick={(e) => { e.stopPropagation(); scroll('left') }}
+        >
+          <ChevronLeft size={14} />
+        </button>
+      )}
+
+      <div ref={scrollRef} className="flex items-end flex-1 overflow-x-auto scrollbar-none" style={{ scrollbarWidth: 'none' }}>
         {tabs.map((tab) => {
           const isActive = tab.id === activeCompany?.id
           return (
@@ -63,7 +108,18 @@ export function TabBar({ pane }: TabBarProps) {
         })}
       </div>
 
-      {pane === 'left' && (
+      {/* 右スクロール矢印 */}
+      {canScrollRight && (
+        <button
+          className="flex items-center justify-center w-6 h-9 shrink-0 transition-colors hover:text-white"
+          style={{ color: 'var(--vsc-text-muted)' }}
+          onClick={(e) => { e.stopPropagation(); scroll('right') }}
+        >
+          <ChevronRight size={14} />
+        </button>
+      )}
+
+      {((pane === 'left' && !splitEnabled) || (pane === 'right' && splitEnabled)) && (
         <button
           className="flex items-center justify-center w-9 h-9 shrink-0 border-l transition-colors hover:text-white"
           style={{

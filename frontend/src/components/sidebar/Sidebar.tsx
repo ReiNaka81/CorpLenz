@@ -24,7 +24,7 @@ export function Sidebar({ width, isOpen, onToggle, onWidthChange }: SidebarProps
     companies,
     selectedCompany, setSelectedCompany,
     splitEnabled, activePane, setRightPaneCompany,
-    searchQuery, activeFilter,
+    searchQuery, activeFilters,
   } = useAppStore()
 
   const handleSelect = (company: Company) => {
@@ -38,12 +38,12 @@ export function Sidebar({ width, isOpen, onToggle, onWidthChange }: SidebarProps
 
   const filtered = useMemo(() => {
     return companies.filter((c) => {
-      const matchFilter = activeFilter === 'すべて' || c.sector === activeFilter
+      const matchFilter = activeFilters.length === 0 || activeFilters.includes(c.sector)
       const matchSearch =
         searchQuery === '' || c.name.includes(searchQuery) || c.ticker.includes(searchQuery)
       return matchFilter && matchSearch
     })
-  }, [companies, searchQuery, activeFilter])
+  }, [companies, searchQuery, activeFilters])
 
   const bySector = useMemo(() => {
     const map = new Map<string, Company[]>()

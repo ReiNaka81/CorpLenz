@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react'
 import { Company, Message } from '@/types'
 import { useAppStore } from '@/store/appStore'
 import { MessageList } from './MessageList'
@@ -14,14 +14,43 @@ interface ChatPanelProps {
   company: Company | null
   width: number
   isOpen: boolean
+  isMobile?: boolean
   onToggle: () => void
   onWidthChange: (w: number) => void
 }
 
-export function ChatPanel({ company, width, isOpen, onToggle, onWidthChange }: ChatPanelProps) {
+export function ChatPanel({ company, width, isOpen, isMobile = false, onToggle, onWidthChange }: ChatPanelProps) {
   const { chatHistories, addMessage, pendingQuestion, setPendingQuestion } = useAppStore()
   const [loading, setLoading] = useState(false)
   const [inputValue, setInputValue] = useState('')
+  const [drawerHeight, setDrawerHeight] = useState(70) // vh
+
+  const handleDrawerDrag = (e: React.TouchEvent | React.MouseEvent) => {
+    const startY = 'touches' in e ? e.touches[0].clientY : e.clientY
+    const startHeight = drawerHeight
+
+    const onMove = (ev: TouchEvent | MouseEvent) => {
+      const currentY = 'touches' in ev ? (ev as TouchEvent).touches[0].clientY : (ev as MouseEvent).clientY
+      const deltaVh = ((startY - currentY) / window.innerHeight) * 100
+      const newHeight = Math.max(20, Math.min(90, startHeight + deltaVh))
+      setDrawerHeight(newHeight)
+    }
+
+    const onEnd = (ev: TouchEvent | MouseEvent) => {
+      const currentY = 'touches' in ev ? (ev as TouchEvent).changedTouches[0].clientY : (ev as MouseEvent).clientY
+      const deltaVh = ((startY - currentY) / window.innerHeight) * 100
+      if (startHeight + deltaVh < 15) onToggle()
+      document.removeEventListener('touchmove', onMove as EventListener)
+      document.removeEventListener('mousemove', onMove as EventListener)
+      document.removeEventListener('touchend', onEnd as EventListener)
+      document.removeEventListener('mouseup', onEnd as EventListener)
+    }
+
+    document.addEventListener('touchmove', onMove as EventListener, { passive: true })
+    document.addEventListener('mousemove', onMove as EventListener)
+    document.addEventListener('touchend', onEnd as EventListener)
+    document.addEventListener('mouseup', onEnd as EventListener)
+  }
 
   const messages: Message[] = company ? (chatHistories[company.id] ?? []) : []
 
@@ -79,6 +108,58 @@ export function ChatPanel({ company, width, isOpen, onToggle, onWidthChange }: C
     document.addEventListener('mouseup', onMouseUp)
   }
 
+  // モバイル: ボトムドロワー
+  if (isMobile) {
+    if (!isOpen) return null
+    return (
+      <div
+        className="fixed inset-x-0 bottom-14 z-50 flex flex-col border-t rounded-t-xl"
+        style={{
+          height: `${drawerHeight}vh`,
+          backgroundColor: 'var(--vsc-sidebar)',
+          borderColor: 'var(--vsc-border)',
+        }}
+      >
+        {/* ドラッグハンドル */}
+        <div
+          className="flex justify-center py-3 shrink-0 cursor-row-resize touch-none"
+          onMouseDown={handleDrawerDrag}
+          onTouchStart={handleDrawerDrag}
+        >
+          <div className="w-8 h-1 rounded-full" style={{ backgroundColor: 'var(--vsc-border)' }} />
+        </div>
+
+        <div
+          className="flex items-center gap-2 px-3 pb-2 border-b shrink-0"
+          style={{ borderColor: 'var(--vsc-border)' }}
+        >
+          <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse shrink-0" />
+          <div className="flex-1">
+            <p className="text-xs font-semibold" style={{ color: 'var(--vsc-text)' }}>
+              AI アナリスト
+            </p>
+            {company && (
+              <p className="text-[10px]" style={{ color: 'var(--vsc-text-muted)' }}>
+                {company.name}
+              </p>
+            )}
+          </div>
+          <button
+            onClick={onToggle}
+            className="p-1 rounded bg-transparent border-0 cursor-pointer"
+            style={{ color: 'var(--vsc-text-muted)' }}
+          >
+            <ChevronDown size={16} />
+          </button>
+        </div>
+
+        <MessageList messages={messages} loading={loading} />
+        <ChatInput value={inputValue} onChange={setInputValue} onSend={handleSend} disabled={!company || loading} />
+      </div>
+    )
+  }
+
+  // デスクトップ: サイドパネル
   if (!isOpen) {
     return (
       <div
@@ -103,7 +184,6 @@ export function ChatPanel({ company, width, isOpen, onToggle, onWidthChange }: C
         borderColor: 'var(--vsc-border)',
       }}
     >
-      {/* Drag handle (left edge) */}
       <div
         className="absolute left-0 top-0 h-full w-1 cursor-col-resize hover:bg-blue-400/50 transition-colors z-10"
         onMouseDown={handleDragStart}
@@ -134,7 +214,6 @@ export function ChatPanel({ company, width, isOpen, onToggle, onWidthChange }: C
       </div>
 
       <MessageList messages={messages} loading={loading} />
-
       <ChatInput value={inputValue} onChange={setInputValue} onSend={handleSend} disabled={!company || loading} />
     </div>
   )
