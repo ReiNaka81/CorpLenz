@@ -1,6 +1,27 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
+import { jaJP } from '@clerk/localizations'
+
+const customJa = {
+  ...jaJP,
+  signIn: {
+    ...jaJP.signIn,
+    start: {
+      ...jaJP.signIn?.start,
+      subtitle: '',
+      subtitleCombined: '',
+    },
+  },
+  signUp: {
+    ...jaJP.signUp,
+    start: {
+      ...jaJP.signUp?.start,
+      subtitle: '',
+      subtitleCombined: '',
+    },
+  },
+}
 import { ThemeProvider } from 'next-themes'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import './globals.css'
@@ -17,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ja" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body>
-        <ClerkProvider>
+        <ClerkProvider localization={customJa}>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
             <TooltipProvider>{children}</TooltipProvider>
           </ThemeProvider>
