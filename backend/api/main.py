@@ -4,13 +4,21 @@ from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+from contextlib import asynccontextmanager
 from api.chat import router as chat_router
 from api.company import router as company_router
 from api.companies import router as companies_router
+from db.mongo import init_client, close_client
 
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS")
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    init_client()
+    yield
+    close_client()
+
+app = FastAPI(lifespan=lifespan)
 
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter

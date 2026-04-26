@@ -11,8 +11,20 @@ INDEX_CREATION_TIMEOUT = 300
 
 uri = f"mongodb+srv://{DB_USER}:{DB_PASSWORD}@recruit.xqewuj0.mongodb.net/?appName=recruit"
 
-def get_collection(collection_name: str = "chunks"):
+client = None
+
+def init_client():
+    global client
     client = MongoClient(uri)
+
+def close_client():
+    if client:
+        client.close()
+
+def get_collection(collection_name: str = "chunks"):
+    global client
+    if client is None:
+        client = MongoClient(uri)
     return client["rag_db"][collection_name]
 
 
