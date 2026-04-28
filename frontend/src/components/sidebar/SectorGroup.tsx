@@ -19,7 +19,7 @@ export function SectorGroup({ sector, companies, selectedId, onSelect }: SectorG
     <div>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center w-full gap-1 px-2 py-1 text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
+        className="flex items-center w-full gap-1 px-2 py-2.5 md:py-1 text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
         style={{ color: 'var(--vsc-text-muted)' }}
         onMouseEnter={(e) => {
           ;(e.currentTarget as HTMLElement).style.color = 'var(--vsc-text)'

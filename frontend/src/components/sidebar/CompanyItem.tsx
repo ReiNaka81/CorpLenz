@@ -12,7 +12,7 @@ export function CompanyItem({ company, isActive, onClick }: CompanyItemProps) {
   return (
     <button
       onClick={onClick}
-      className="relative flex items-center w-full gap-2 px-4 py-1.5 text-left text-sm transition-colors cursor-pointer"
+      className="relative flex items-center w-full gap-2 px-4 py-3 md:py-1.5 text-left text-sm transition-colors cursor-pointer"
       style={{
         backgroundColor: isActive ? 'var(--vsc-selection)' : 'transparent',
         color: 'var(--vsc-text)',

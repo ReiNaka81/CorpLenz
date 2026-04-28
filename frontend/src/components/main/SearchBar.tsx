@@ -31,7 +31,7 @@ export function SearchBar() {
       className="flex flex-col shrink-0 border-b"
       style={{ backgroundColor: 'var(--vsc-sidebar)', borderColor: 'var(--vsc-border)' }}
     >
-      <div className="flex items-center gap-2 px-3 py-2">
+      <div className="flex items-center gap-2 px-3 py-2 md:py-2">
         <div className="relative flex-1">
           <Search
             size={14}
@@ -42,13 +42,13 @@ export function SearchBar() {
             ref={inputRef}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="企業名・証券コードで検索 (⌘K)"
-            className="pl-8 h-7 text-xs border-0 focus-visible:ring-1"
+            placeholder="企業名・証券コードで検索"
+            className="pl-8 h-10 text-sm md:h-7 md:text-xs border-0 focus-visible:ring-1"
             style={{ backgroundColor: 'var(--vsc-editor)', color: 'var(--vsc-text)' }}
           />
         </div>
         <button
-          className="flex items-center justify-center w-7 h-7 rounded-sm transition-colors"
+          className="flex items-center justify-center w-10 h-10 md:w-7 md:h-7 rounded-sm transition-colors"
           style={{
             color: showFilter ? 'var(--vsc-accent)' : 'var(--vsc-text-muted)',
             backgroundColor: showFilter ? 'var(--vsc-hover)' : 'transparent',
@@ -56,18 +56,18 @@ export function SearchBar() {
           onClick={() => setShowFilter((v) => !v)}
           title="業種フィルター"
         >
-          <SlidersHorizontal size={14} />
+          <SlidersHorizontal size={16} />
         </button>
       </div>
 
       {showFilter && (
-        <div className="flex flex-wrap gap-1 px-3 pb-2">
+        <div className="flex flex-wrap gap-1.5 px-3 pb-3 md:pb-2">
             <Button
               key="すべて"
               variant="ghost"
               size="sm"
               onClick={clearFilters}
-              className="h-6 px-2 text-xs rounded-sm"
+              className="h-8 px-3 text-sm md:h-6 md:px-2 md:text-xs rounded-sm"
               style={{
                 backgroundColor: activeFilters.length === 0 ? 'var(--vsc-accent)' : 'transparent',
                 color: activeFilters.length === 0 ? '#ffffff' : 'var(--vsc-text-muted)',
@@ -81,7 +81,7 @@ export function SearchBar() {
               variant="ghost"
               size="sm"
               onClick={() => toggleFilter(s)}
-              className="h-6 px-2 text-xs rounded-sm"
+              className="h-8 px-3 text-sm md:h-6 md:px-2 md:text-xs rounded-sm"
               style={{
                 backgroundColor: activeFilters.includes(s) ? 'var(--vsc-accent)' : 'transparent',
                 color: activeFilters.includes(s) ? '#ffffff' : 'var(--vsc-text-muted)',

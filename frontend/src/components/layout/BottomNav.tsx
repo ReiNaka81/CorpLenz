@@ -23,15 +23,15 @@ export function BottomNav({ sidebarOpen, onSidebarToggle }: BottomNavProps) {
           key={label}
           onClick={onClick}
           disabled={disabled}
-          className="flex flex-col items-center justify-center flex-1 py-2 gap-1 border-0 bg-transparent"
+          className="flex flex-col items-center justify-center flex-1 py-3 gap-1 border-0 bg-transparent min-h-[52px]"
           style={{
             color: active ? 'var(--vsc-accent)' : 'var(--vsc-text-muted)',
             opacity: disabled ? 0.4 : 1,
             cursor: disabled ? 'not-allowed' : 'pointer',
           }}
         >
-          <Icon size={20} />
-          <span className="text-[10px]">{label}</span>
+          <Icon size={22} />
+          <span className="text-xs">{label}</span>
         </button>
       ))}
     </div>
