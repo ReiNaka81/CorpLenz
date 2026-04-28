@@ -122,6 +122,13 @@ export function AppLayout() {
             />
           </div>
         )}
+        {/* モバイル: サイドバー背景オーバーレイ（タップで閉じる） */}
+        {isMobile && sidebarOpen && (
+          <div
+            className="fixed inset-0 z-40 bg-black/50"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
 
         {/* デスクトップ: 通常のサイドバー */}
         {!isMobile && (
@@ -197,10 +204,10 @@ export function AppLayout() {
       {isMobile && !chatOpen && (
         <button
           onClick={() => setChatOpen(true)}
-          className="fixed bottom-20 right-4 z-40 flex items-center justify-center w-12 h-12 rounded-full shadow-lg"
+          className="fixed bottom-[68px] right-4 z-40 flex items-center justify-center w-14 h-14 rounded-full shadow-lg"
           style={{ backgroundColor: 'var(--vsc-accent)', color: '#ffffff' }}
         >
-          <MessageSquare size={20} />
+          <MessageSquare size={22} />
         </button>
       )}
     </div>
