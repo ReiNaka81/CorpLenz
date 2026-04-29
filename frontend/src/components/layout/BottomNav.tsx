@@ -16,7 +16,11 @@ export function BottomNav({ sidebarOpen, onSidebarToggle }: BottomNavProps) {
   return (
     <div
       className="flex items-center border-t shrink-0"
-      style={{ backgroundColor: 'var(--vsc-activity-bar)', borderColor: 'var(--vsc-border)' }}
+      style={{
+        backgroundColor: 'var(--vsc-activity-bar)',
+        borderColor: 'var(--vsc-border)',
+        paddingBottom: 'env(safe-area-inset-bottom)',
+      }}
     >
       {items.map(({ icon: Icon, label, active, onClick, disabled }) => (
         <button

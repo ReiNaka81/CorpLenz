@@ -113,7 +113,7 @@ export function ChatPanel({ company, width, isOpen, isMobile = false, onToggle, 
     if (!isOpen) return null
     return (
       <div
-        className="fixed inset-x-0 bottom-[52px] z-50 flex flex-col border-t rounded-t-xl"
+        className="fixed inset-x-0 bottom-0 z-50 flex flex-col border-t rounded-t-xl"
         style={{
           height: `${drawerHeight}vh`,
           backgroundColor: 'var(--vsc-sidebar)',
@@ -154,7 +154,9 @@ export function ChatPanel({ company, width, isOpen, isMobile = false, onToggle, 
         </div>
 
         <MessageList messages={messages} loading={loading} />
-        <ChatInput value={inputValue} onChange={setInputValue} onSend={handleSend} disabled={!company || loading} />
+        <div style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+          <ChatInput value={inputValue} onChange={setInputValue} onSend={handleSend} disabled={!company || loading} />
+        </div>
       </div>
     )
   }
