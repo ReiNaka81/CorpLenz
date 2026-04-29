@@ -1,10 +1,9 @@
 'use client'
 
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { MessageSquare } from 'lucide-react'
+import { MessageSquare, Menu } from 'lucide-react'
 import { TitleBar } from './TitleBar'
 import { ActivityBar } from './ActivityBar'
-import { BottomNav } from './BottomNav'
 import { Sidebar } from '@/components/sidebar/Sidebar'
 import { SearchBar } from '@/components/main/SearchBar'
 import { TabBar } from '@/components/main/TabBar'
@@ -47,7 +46,9 @@ export function AppLayout() {
   }, [])
 
   const [activeItem, setActiveItem] = useState('企業一覧')
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth >= 768 : true
+  )
   const [sidebarWidth, setSidebarWidth] = useState(240)
   const [chatWidth, setChatWidth] = useState(320)
   const [splitRatio, setSplitRatio] = useState(0.5)
@@ -105,6 +106,35 @@ export function AppLayout() {
         <TitleBar />
       </div>
 
+      {/* モバイルのみ ヘッダーバー */}
+      <div
+        className="flex items-center px-2 border-b shrink-0 md:hidden"
+        style={{
+          backgroundColor: 'var(--vsc-sidebar)',
+          borderColor: 'var(--vsc-border)',
+          paddingTop: 'env(safe-area-inset-top)',
+          minHeight: '48px',
+        }}
+      >
+        <button
+          onClick={() => setSidebarOpen((o) => !o)}
+          className="flex items-center justify-center w-11 h-11"
+          style={{ color: sidebarOpen ? 'var(--vsc-accent)' : 'var(--vsc-text-muted)' }}
+        >
+          <Menu size={22} />
+        </button>
+        <span className="flex-1 text-center text-sm font-semibold" style={{ color: 'var(--vsc-text)' }}>
+          CorpLens
+        </span>
+        <button
+          onClick={() => setChatOpen(!chatOpen)}
+          className="flex items-center justify-center w-11 h-11"
+          style={{ color: chatOpen ? 'var(--vsc-accent)' : 'var(--vsc-text-muted)' }}
+        >
+          <MessageSquare size={22} />
+        </button>
+      </div>
+
       <div className="flex flex-1 overflow-hidden">
         {/* デスクトップのみ ActivityBar */}
         <div className="hidden md:flex">
@@ -121,6 +151,13 @@ export function AppLayout() {
               onWidthChange={() => {}}
             />
           </div>
+        )}
+        {/* モバイル: サイドバー背景オーバーレイ（タップで閉じる） */}
+        {isMobile && sidebarOpen && (
+          <div
+            className="fixed inset-0 z-40 bg-black/50"
+            onClick={() => setSidebarOpen(false)}
+          />
         )}
 
         {/* デスクトップ: 通常のサイドバー */}
@@ -185,24 +222,6 @@ export function AppLayout() {
         />
       </div>
 
-      {/* モバイルのみ BottomNav */}
-      <div className="md:hidden">
-        <BottomNav
-          sidebarOpen={sidebarOpen}
-          onSidebarToggle={() => setSidebarOpen((o) => !o)}
-        />
-      </div>
-
-      {/* モバイル: チャット非表示時のフローティングボタン */}
-      {isMobile && !chatOpen && (
-        <button
-          onClick={() => setChatOpen(true)}
-          className="fixed bottom-20 right-4 z-40 flex items-center justify-center w-12 h-12 rounded-full shadow-lg"
-          style={{ backgroundColor: 'var(--vsc-accent)', color: '#ffffff' }}
-        >
-          <MessageSquare size={20} />
-        </button>
-      )}
     </div>
   )
 }

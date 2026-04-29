@@ -101,9 +101,9 @@ export function Sidebar({ width, isOpen, onToggle, onWidthChange }: SidebarProps
         <span className="text-xs font-semibold uppercase tracking-wider">企業一覧</span>
         <button
           onClick={onToggle}
-          className="p-0.5 rounded hover:opacity-70 transition-opacity bg-transparent border-0 cursor-pointer"
+          className="flex items-center justify-center w-10 h-10 md:w-6 md:h-6 rounded hover:opacity-70 transition-opacity bg-transparent border-0 cursor-pointer"
         >
-          <ChevronLeft size={14} />
+          <ChevronLeft size={18} />
         </button>
       </div>
 

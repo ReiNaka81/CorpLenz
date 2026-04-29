@@ -94,7 +94,7 @@ export function TabBar({ pane, isActive = false }: TabBarProps) {
               <span>{tab.name}</span>
               <span style={{ color: 'var(--vsc-text-muted)' }}>{tab.ticker}</span>
               <button
-                className="flex items-center justify-center w-4 h-4 rounded-sm opacity-0 group-hover:opacity-100 hover:!opacity-100 transition-opacity"
+                className="flex items-center justify-center w-5 h-5 rounded-sm transition-opacity md:opacity-0 md:group-hover:opacity-100"
                 style={{ color: 'var(--vsc-text-muted)' }}
                 onClick={(e) => {
                   e.stopPropagation()

@@ -113,7 +113,7 @@ export function ChatPanel({ company, width, isOpen, isMobile = false, onToggle, 
     if (!isOpen) return null
     return (
       <div
-        className="fixed inset-x-0 bottom-14 z-50 flex flex-col border-t rounded-t-xl"
+        className="fixed inset-x-0 bottom-0 z-50 flex flex-col border-t rounded-t-xl"
         style={{
           height: `${drawerHeight}vh`,
           backgroundColor: 'var(--vsc-sidebar)',
@@ -130,31 +130,33 @@ export function ChatPanel({ company, width, isOpen, isMobile = false, onToggle, 
         </div>
 
         <div
-          className="flex items-center gap-2 px-3 pb-2 border-b shrink-0"
+          className="flex items-center gap-2 px-4 py-2 border-b shrink-0"
           style={{ borderColor: 'var(--vsc-border)' }}
         >
-          <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse shrink-0" />
+          <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse shrink-0" />
           <div className="flex-1">
-            <p className="text-xs font-semibold" style={{ color: 'var(--vsc-text)' }}>
+            <p className="text-sm font-semibold" style={{ color: 'var(--vsc-text)' }}>
               AI アナリスト
             </p>
             {company && (
-              <p className="text-[10px]" style={{ color: 'var(--vsc-text-muted)' }}>
+              <p className="text-xs" style={{ color: 'var(--vsc-text-muted)' }}>
                 {company.name}
               </p>
             )}
           </div>
           <button
             onClick={onToggle}
-            className="p-1 rounded bg-transparent border-0 cursor-pointer"
+            className="flex items-center justify-center w-10 h-10 rounded bg-transparent border-0 cursor-pointer"
             style={{ color: 'var(--vsc-text-muted)' }}
           >
-            <ChevronDown size={16} />
+            <ChevronDown size={20} />
           </button>
         </div>
 
         <MessageList messages={messages} loading={loading} />
-        <ChatInput value={inputValue} onChange={setInputValue} onSend={handleSend} disabled={!company || loading} />
+        <div style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+          <ChatInput value={inputValue} onChange={setInputValue} onSend={handleSend} disabled={!company || loading} />
+        </div>
       </div>
     )
   }

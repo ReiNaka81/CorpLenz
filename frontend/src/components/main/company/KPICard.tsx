@@ -20,7 +20,7 @@ export function KPICard({ label, value, sub, trend, tooltip }: KPICardProps) {
       className="border"
       style={{ backgroundColor: 'var(--vsc-sidebar)', borderColor: 'var(--vsc-border)' }}
     >
-      <CardContent className="p-4">
+      <CardContent className="p-3 md:p-4">
         <div className="flex items-center gap-1 mb-1">
           <p className="text-xs" style={{ color: 'var(--vsc-text-muted)' }}>
             {label}
@@ -34,7 +34,7 @@ export function KPICard({ label, value, sub, trend, tooltip }: KPICardProps) {
             </Tooltip>
           )}
         </div>
-        <p className="text-xl font-semibold tabular-nums" style={{ color: 'var(--vsc-text)' }}>
+        <p className="text-lg md:text-xl font-semibold tabular-nums" style={{ color: 'var(--vsc-text)' }}>
           {value}
         </p>
         <div className="flex items-center justify-between mt-1">

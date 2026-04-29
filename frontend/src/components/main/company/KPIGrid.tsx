@@ -34,7 +34,7 @@ export function KPIGrid({ financials }: KPIGridProps) {
       : null
 
   return (
-    <div className="grid grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
       <KPICard
         label="売上高"
         value={fmt(latest.revenue)}
