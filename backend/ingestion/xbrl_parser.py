@@ -97,10 +97,19 @@ def _is_summary(tag_name: str) -> bool:
     return "SummaryOfBusinessResults" in tag_name or "KeyFinancialData" in tag_name
 
 
+# 単体（非連結）企業はコンテキストに "_NonConsolidatedMember" が付く。連結企業の
+# SummaryOfBusinessResults は "_ConsolidatedMember" が付く場合がある。
+_CTX_SUFFIXES = ("", "_NonConsolidatedMember", "_ConsolidatedMember")
+
+
+def _ctx_matches(ctx: str, base: str) -> bool:
+    return any(ctx == base + s for s in _CTX_SUFFIXES)
+
+
 def _extract_year(all_items: list[dict], duration_ctx: str, instant_ctx: str) -> dict:
     """1年分の財務数値を抽出する"""
-    duration_items = [i for i in all_items if i["context"] == duration_ctx]
-    instant_items  = [i for i in all_items if i["context"] == instant_ctx]
+    duration_items = [i for i in all_items if _ctx_matches(i["context"], duration_ctx)]
+    instant_items  = [i for i in all_items if _ctx_matches(i["context"], instant_ctx)]
 
     names = {i["name"].split(":")[-1] for i in duration_items}
     if any(_IFRS_REVENUE_TAG in n for n in names):
