@@ -5,17 +5,14 @@ from pymongo import MongoClient
 from pymongo.operations import SearchIndexModel
 from models.models import CompanySummary
 
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
+MONGODB_URI = os.getenv("MONGODB_URI")
 INDEX_CREATION_TIMEOUT = 300
-
-uri = f"mongodb+srv://{DB_USER}:{DB_PASSWORD}@recruit.xqewuj0.mongodb.net/?appName=recruit"
 
 client = None
 
 def init_client():
     global client
-    client = MongoClient(uri)
+    client = MongoClient(MONGODB_URI)
 
 def close_client():
     if client:
@@ -24,7 +21,7 @@ def close_client():
 def get_collection(collection_name: str = "chunks"):
     global client
     if client is None:
-        client = MongoClient(uri)
+        client = MongoClient(MONGODB_URI)
     return client["rag_db"][collection_name]
 
 
