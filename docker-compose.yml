@@ -10,9 +10,7 @@ services:
       - ANTHROPIC_API_KEY
       - CLAUDE_MODEL
       - VOYAGE_API_KEY
-      - MONGO_URI
-      - DB_USER
-      - DB_PASSWORD
+      - MONGODB_URI
       - EDINET_API_KEY
 
   frontend:
