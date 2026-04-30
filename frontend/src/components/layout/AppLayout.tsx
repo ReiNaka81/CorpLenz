@@ -92,7 +92,7 @@ export function AppLayout() {
       className="flex-1 flex items-center justify-center text-sm"
       style={{ color: 'var(--vsc-text-muted)' }}
     >
-      {isMobile ? '下の「企業一覧」から企業を選択してください' : '左のサイドバーから企業を選択してください'}
+      {isMobile ? '左上のメニューから企業を選択してください' : '左のサイドバーから企業を選択してください'}
     </div>
   )
 
@@ -143,13 +143,16 @@ export function AppLayout() {
 
         {/* モバイル: サイドバーをフルスクリーンオーバーレイで表示 */}
         {isMobile && sidebarOpen && (
-          <div className="fixed inset-0 z-50 flex">
-            <Sidebar
-              width={windowWidth}
-              isOpen={true}
-              onToggle={() => setSidebarOpen(false)}
-              onWidthChange={() => {}}
-            />
+          <div className="fixed inset-0 z-50 flex flex-col">
+            <SearchBar />
+            <div className="flex flex-1 min-h-0">
+              <Sidebar
+                width={windowWidth}
+                isOpen={true}
+                onToggle={() => setSidebarOpen(false)}
+                onWidthChange={() => {}}
+              />
+            </div>
           </div>
         )}
         {/* モバイル: サイドバー背景オーバーレイ（タップで閉じる） */}
@@ -171,7 +174,9 @@ export function AppLayout() {
         )}
 
         <div className="flex flex-col flex-1 overflow-hidden">
-          <SearchBar />
+          <div className="hidden md:block">
+            <SearchBar />
+          </div>
           <div ref={mainRef} className="flex flex-1 overflow-hidden">
             {/* 左ペイン */}
             <div
