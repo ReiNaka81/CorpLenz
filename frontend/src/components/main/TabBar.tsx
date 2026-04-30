@@ -121,7 +121,7 @@ export function TabBar({ pane, isActive = false }: TabBarProps) {
 
       {((pane === 'left' && !splitEnabled) || (pane === 'right' && splitEnabled)) && (
         <button
-          className="flex items-center justify-center w-9 h-9 shrink-0 border-l transition-colors hover:text-white"
+          className="hidden md:flex items-center justify-center w-9 h-9 shrink-0 border-l transition-colors hover:text-white"
           style={{
             color: splitEnabled ? 'var(--vsc-text)' : 'var(--vsc-text-muted)',
             borderColor: 'var(--vsc-border)',
