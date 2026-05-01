@@ -1,7 +1,12 @@
-export const runtime = 'edge'
+'use client'
 
-import { redirect } from 'next/navigation'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
-  redirect('/7203')
+  const router = useRouter()
+  useEffect(() => {
+    router.replace('/7203')
+  }, [router])
+  return null
 }
