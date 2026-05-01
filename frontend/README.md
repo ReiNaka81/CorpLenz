@@ -122,6 +122,9 @@ StatusBar
 
 ## 環境変数
 
+ビルド時に値が焼き込まれるため、ローカルは `.env.local`、本番は Cloudflare Dashboard の Build Variables に登録する。
+
 | 変数 | 用途 |
 |---|---|
 | `NEXT_PUBLIC_API_URL` | バックエンド API のベース URL（例: `http://localhost:8000`） |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk 認証の公開キー |
