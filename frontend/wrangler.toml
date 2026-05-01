@@ -1,4 +1,4 @@
-name = "corplenz-frontend"
+name = "corplenz"
 main = ".open-next/worker.js"
 compatibility_date = "2026-05-01"
 compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
@@ -9,4 +9,4 @@ binding = "ASSETS"
 
 [[services]]
 binding = "WORKER_SELF_REFERENCE"
-service = "corplenz-frontend"
+service = "corplenz"
