@@ -26,7 +26,7 @@ export function ManagementSection({ data }: ManagementSectionProps) {
 
   const askLLM = () => {
     setChatOpen(true)
-    setPendingQuestion('この企業の経営方針・課題・リスクについて、就活の面接や志望動機にどう活かせるか教えてください。')
+    setPendingQuestion('この企業の経営方針・課題・リスクについて詳しく教えてください。')
   }
 
   return (

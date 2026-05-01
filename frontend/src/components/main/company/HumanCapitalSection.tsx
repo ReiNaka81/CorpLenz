@@ -29,7 +29,7 @@ export function HumanCapitalSection({ data }: HumanCapitalSectionProps) {
 
   const askLLM = () => {
     setChatOpen(true)
-    setPendingQuestion('人的資本（従業員数・平均年収・勤続年数・女性管理職比率）について、就活生として注目すべきポイントや他社との比較の観点を教えてください。')
+    setPendingQuestion('この企業の人的資本（従業員数・平均年収・勤続年数・女性管理職比率）について詳しく教えてください。')
   }
 
   return (

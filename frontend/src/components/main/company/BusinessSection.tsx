@@ -12,7 +12,7 @@ export function BusinessSection({ data }: BusinessSectionProps) {
 
   const askLLM = () => {
     setChatOpen(true)
-    setPendingQuestion('この企業の事業内容・セグメント構成・競合優位性について、就活生の視点から詳しく教えてください。')
+    setPendingQuestion('この企業の事業内容・セグメント構成・競合優位性について詳しく教えてください。')
   }
 
   return (
