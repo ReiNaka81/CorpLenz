@@ -1,8 +1,10 @@
 import type { NextConfig } from "next";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
-const nextConfig: NextConfig = {
-  // @cloudflare/next-on-pages requires this
-  eslint: { ignoreDuringBuilds: true },
-};
+if (process.env.NODE_ENV === "development") {
+  initOpenNextCloudflareForDev();
+}
+
+const nextConfig: NextConfig = {};
 
 export default nextConfig;
