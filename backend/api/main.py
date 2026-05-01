@@ -10,7 +10,8 @@ from api.company import router as company_router
 from api.companies import router as companies_router
 from db.mongo import init_client, close_client
 
-ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS")
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "")
+ALLOWED_ORIGIN_REGEX = os.getenv("ALLOWED_ORIGIN_REGEX")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -24,14 +25,12 @@ limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-if ALLOWED_ORIGINS: 
-    origins = [ALLOWED_ORIGINS, "http://localhost:3000"]
-else:   
-    origins = ["http://localhost:3000"]
+origins = ["http://localhost:3000"] + [o.strip() for o in ALLOWED_ORIGINS.split(",") if o.strip()]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=ALLOWED_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type", "Authorization"],
