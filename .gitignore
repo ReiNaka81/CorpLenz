@@ -220,6 +220,9 @@ pyrightconfig.json
 # Clerk のローカルキャッシュ（シークレットを含む可能性あり）
 frontend/.clerk/
 
+# Wrangler local cache
+frontend/.wrangler/
+
 # EDINET downloaded files (PDFs, XBRL)
 backend/data/
 !backend/data/sector_map.csv
