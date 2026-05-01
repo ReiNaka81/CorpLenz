@@ -144,7 +144,7 @@ export const useAppStore = create<AppStore>()(
       clearFilters: () => set({ activeFilters: [] }),
     }),
     {
-      name: 'corplens-storage',
+      name: 'CorpLenz-storage',
       partialize: (state) => ({ chatHistories: state.chatHistories }),
     }
   )

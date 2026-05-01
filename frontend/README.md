@@ -92,7 +92,7 @@ StatusBar
 | `searchQuery` | `string` | サイドバーの検索ワード |
 | `activeFilters` | `string[]` | サイドバーの業種フィルター（複数選択可） |
 
-`chatHistories` のみ `localStorage` に永続化（キー: `corplens-storage`）。
+`chatHistories` のみ `localStorage` に永続化（キー: `CorpLenz-storage`）。
 
 ---
 

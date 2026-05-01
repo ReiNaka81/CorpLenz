@@ -29,7 +29,7 @@ import './globals.css'
 
 
 export const metadata: Metadata = {
-  title: 'CorpLens — 企業財務分析',
+  title: 'CorpLenz — 企業財務分析',
   description: '有価証券報告書RAGによる企業財務分析ツール',
 }
 

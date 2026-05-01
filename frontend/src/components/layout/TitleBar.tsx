@@ -8,7 +8,7 @@ export function TitleBar() {
       className="flex items-center h-8 text-xs select-none shrink-0 px-3"
       style={{ backgroundColor: 'var(--vsc-title-bar)', color: 'var(--vsc-text)' }}
     >
-      <span className="flex-1 text-center">CorpLens — 企業財務分析</span>
+      <span className="flex-1 text-center">CorpLenz — 企業財務分析</span>
       <div className="flex items-center">
         <Show when="signed-out">
           <SignInButton mode="modal">
