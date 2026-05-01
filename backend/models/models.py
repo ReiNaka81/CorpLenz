@@ -71,9 +71,10 @@ class SummaryResponse(BaseModel):
     financials: list[FinancialYear]  # XBRLから取得した財務データ（最大5年分）
 
 class CompanyItem(BaseModel):
-    ticker: str  # 証券コード
-    name: str    # 会社名
-    sector: str  # 業種
+    ticker: str              # 証券コード
+    name: str                # 会社名
+    name_en: str | None = None  # 英語会社名
+    sector: str              # 業種
 
 
 class CompaniesResponse(BaseModel):

@@ -1,6 +1,7 @@
 export interface Company {
   id: string
   name: string
+  name_en?: string
   ticker: string
   sector: string
   color: string

@@ -42,7 +42,7 @@ export function SearchBar() {
             ref={inputRef}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="企業名・証券コードで検索"
+            placeholder="企業名・英語名・証券コードで検索"
             className="pl-8 h-10 text-sm md:h-7 md:text-xs border-0 focus-visible:ring-1"
             style={{ backgroundColor: 'var(--vsc-editor)', color: 'var(--vsc-text)' }}
           />

@@ -7,5 +7,7 @@ router = APIRouter()
 @router.get("/companies", response_model=CompaniesResponse)
 def get_companies():
     collection = get_collection("companies")
-    results = list(collection.find({}, {"_id": 0, "ticker": 1, "name": 1, "sector": 1}))
+    results = list(
+        collection.find({}, {"_id": 0, "ticker": 1, "name": 1, "name_en": 1, "sector": 1})
+    )
     return {"companies": results}
