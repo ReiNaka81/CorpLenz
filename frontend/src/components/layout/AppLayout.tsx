@@ -42,7 +42,7 @@ export function AppLayout() {
         }))
         setCompanies(companies)
       })
-      .catch(() => {})
+      .catch(() => { })
   }, [])
 
   const [activeItem, setActiveItem] = useState('企業一覧')
@@ -124,7 +124,7 @@ export function AppLayout() {
           <Menu size={22} />
         </button>
         <span className="flex-1 text-center text-sm font-semibold" style={{ color: 'var(--vsc-text)' }}>
-          CorpLens
+          CorpLenz
         </span>
         <button
           onClick={() => setChatOpen(!chatOpen)}
@@ -150,7 +150,7 @@ export function AppLayout() {
                 width={windowWidth}
                 isOpen={true}
                 onToggle={() => setSidebarOpen(false)}
-                onWidthChange={() => {}}
+                onWidthChange={() => { }}
               />
             </div>
           </div>
