@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // @cloudflare/next-on-pages requires this
+  eslint: { ignoreDuringBuilds: true },
 };
 
 export default nextConfig;
