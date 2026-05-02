@@ -15,6 +15,5 @@ def chat(request: Request, req: ChatRequest):
         contexts = retrieve(req.query, req.ticker)
         answer = answer_with_context(req.query, contexts, req.model)
         return {"answer": answer}
-    except Exception as e:
-        import traceback; traceback.print_exc()
+    except Exception:
         raise HTTPException(status_code=500, detail="回答の生成に失敗しました")
