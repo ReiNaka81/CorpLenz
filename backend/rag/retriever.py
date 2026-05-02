@@ -3,7 +3,7 @@ from db.mongo import get_collection
 
 NUM_CANDIDATES = 100
 
-def retrieve(query: str, ticker: str, top_k: int = 5) -> list[dict]:
+def retrieve(query: str, ticker: str, top_k: int = 8) -> list[dict]:
     """クエリに意味的に近いチャンクを MongoDB vector search で取得する。
 
     Args:

@@ -13,7 +13,8 @@ limiter = Limiter(key_func=get_remote_address)
 def chat(request: Request, req: ChatRequest):
     try:
         contexts = retrieve(req.query, req.ticker)
-        answer = answer_with_context(req.query, contexts)
+        answer = answer_with_context(req.query, contexts, req.model)
         return {"answer": answer}
-    except Exception:
+    except Exception as e:
+        import traceback; traceback.print_exc()
         raise HTTPException(status_code=500, detail="回答の生成に失敗しました")

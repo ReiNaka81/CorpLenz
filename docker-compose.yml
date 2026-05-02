@@ -9,6 +9,8 @@ services:
       - PYTHONUNBUFFERED=1
       - ANTHROPIC_API_KEY
       - CLAUDE_MODEL
+      - DEEPSEEK_API_KEY
+      - DEEPSEEK_MODEL
       - VOYAGE_API_KEY
       - MONGODB_URI
       - EDINET_API_KEY
