@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { MessageSquare, Menu } from 'lucide-react'
+import { SignInButton, Show, UserButton } from '@clerk/nextjs'
 import { TitleBar } from './TitleBar'
 import { ActivityBar } from './ActivityBar'
 import { Sidebar } from '@/components/sidebar/Sidebar'
@@ -126,13 +127,25 @@ export function AppLayout() {
         <span className="flex-1 text-center text-sm font-semibold" style={{ color: 'var(--vsc-text)' }}>
           CorpLenz
         </span>
-        <button
-          onClick={() => setChatOpen(!chatOpen)}
-          className="flex items-center justify-center w-11 h-11"
-          style={{ color: chatOpen ? 'var(--vsc-accent)' : 'var(--vsc-text-muted)' }}
-        >
-          <MessageSquare size={22} />
-        </button>
+        <div className="flex items-center gap-1">
+          <Show when="signed-out">
+            <SignInButton mode="modal">
+              <button className="text-xs px-2 py-0.5 rounded" style={{ backgroundColor: 'var(--vsc-accent)', color: '#ffffff' }}>
+                サインイン
+              </button>
+            </SignInButton>
+          </Show>
+          <Show when="signed-in">
+            <UserButton appearance={{ elements: { avatarBox: 'w-5 h-5' } }} />
+          </Show>
+          <button
+            onClick={() => setChatOpen(!chatOpen)}
+            className="flex items-center justify-center w-11 h-11"
+            style={{ color: chatOpen ? 'var(--vsc-accent)' : 'var(--vsc-text-muted)' }}
+          >
+            <MessageSquare size={22} />
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden">
