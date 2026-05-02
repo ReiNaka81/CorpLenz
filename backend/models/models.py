@@ -5,6 +5,7 @@ from pydantic import BaseModel, field_validator
 class ChatRequest(BaseModel):
     query: str    # ユーザーの質問文
     ticker: str   # 対象企業の証券コード（例: "7203"）
+    model: str = "claude"  # 使用するモデル（"claude" or "deepseek"）
 
     @field_validator("query")
     @classmethod

@@ -24,6 +24,7 @@ export function ChatPanel({ company, width, isOpen, isMobile = false, onToggle, 
   const [loading, setLoading] = useState(false)
   const [inputValue, setInputValue] = useState('')
   const [drawerHeight, setDrawerHeight] = useState(70) // vh
+  const [selectedModel, setSelectedModel] = useState<'claude' | 'deepseek'>('deepseek')
 
   const handleDrawerDrag = (e: React.TouchEvent | React.MouseEvent) => {
     const startY = 'touches' in e ? e.touches[0].clientY : e.clientY
@@ -72,7 +73,7 @@ export function ChatPanel({ company, width, isOpen, isMobile = false, onToggle, 
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: text, ticker: company.ticker }),
+        body: JSON.stringify({ query: text, ticker: company.ticker, model: selectedModel }),
       })
       const data = await res.json()
       const aiMsg: Message = {
@@ -144,6 +145,15 @@ export function ChatPanel({ company, width, isOpen, isMobile = false, onToggle, 
               </p>
             )}
           </div>
+          <select
+              value={selectedModel}
+              onChange={(e) => { if (e.target.value !== 'claude') setSelectedModel(e.target.value as 'claude' | 'deepseek') }}
+              className="text-xs rounded px-1 py-0.5 border-0 cursor-pointer"
+              style={{ backgroundColor: 'var(--vsc-editor)', color: 'var(--vsc-text)' }}
+            >
+              <option value="claude" disabled>Claude Haiku（使用制限中）</option>
+              <option value="deepseek">DeepSeek V4 Flash</option>
+            </select>
           <button
             onClick={onToggle}
             className="flex items-center justify-center w-10 h-10 rounded bg-transparent border-0 cursor-pointer"
@@ -203,7 +213,7 @@ export function ChatPanel({ company, width, isOpen, isMobile = false, onToggle, 
           <ChevronRight size={14} />
         </button>
         <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse shrink-0" />
-        <div>
+        <div className="flex-1">
           <p className="text-xs font-semibold" style={{ color: 'var(--vsc-text)' }}>
             AI アナリスト
           </p>
@@ -213,6 +223,15 @@ export function ChatPanel({ company, width, isOpen, isMobile = false, onToggle, 
             </p>
           )}
         </div>
+        <select
+          value={selectedModel}
+          onChange={(e) => { if (e.target.value !== 'claude') setSelectedModel(e.target.value as 'claude' | 'deepseek') }}
+          className="text-[10px] rounded px-1 py-0.5 border-0 cursor-pointer"
+          style={{ backgroundColor: 'var(--vsc-editor)', color: 'var(--vsc-text)' }}
+        >
+          <option value="claude" disabled>Claude Haiku（使用制限中）</option>
+          <option value="deepseek">DeepSeek V4 Flash</option>
+        </select>
       </div>
 
       <MessageList messages={messages} loading={loading} />
