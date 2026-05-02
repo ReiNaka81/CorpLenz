@@ -1,7 +1,5 @@
 import { clerkMiddleware } from '@clerk/nextjs/server'
 
-export const runtime = 'edge'
-
 export default clerkMiddleware()
 
 export const config = {
