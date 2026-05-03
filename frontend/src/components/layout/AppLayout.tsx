@@ -34,10 +34,16 @@ export function AppLayout() {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/companies`)
       .then((res) => res.json())
       .then((data) => {
-        const companies = data.companies.map((c: { ticker: string; name: string; sector: string }) => ({
+        const companies = data.companies.map((c: {
+          ticker: string
+          name: string
+          name_en?: string | null
+          sector: string
+        }) => ({
           id: c.ticker,
           ticker: c.ticker,
           name: c.name,
+          name_en: c.name_en ?? undefined,
           sector: c.sector,
           color: tickerToColor(c.ticker),
         }))

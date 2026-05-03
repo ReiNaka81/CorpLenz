@@ -37,10 +37,14 @@ export function Sidebar({ width, isOpen, onToggle, onWidthChange }: SidebarProps
   }
 
   const filtered = useMemo(() => {
+    const normalizedQuery = searchQuery.toLowerCase()
     return companies.filter((c) => {
       const matchFilter = activeFilters.length === 0 || activeFilters.includes(c.sector)
       const matchSearch =
-        searchQuery === '' || c.name.includes(searchQuery) || c.ticker.includes(searchQuery)
+        searchQuery === '' ||
+        c.name.includes(searchQuery) ||
+        c.ticker.includes(searchQuery) ||
+        c.name_en?.toLowerCase().includes(normalizedQuery) === true
       return matchFilter && matchSearch
     })
   }, [companies, searchQuery, activeFilters])

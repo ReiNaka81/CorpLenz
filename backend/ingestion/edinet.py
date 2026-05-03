@@ -10,18 +10,20 @@ BASE_URL = "https://api.edinet-fsa.go.jp//api/v2"
 SAVE_DIR = Path(__file__).parent.parent / "data"    # backend/dataを指定
 
 SECTOR_CSV = Path(__file__).parent.parent / "data" / "sector_map.csv"
+NAME_EN_CSV = Path(__file__).parent.parent / "data" / "name_en_map.csv"
 
-def load_sector_map() -> dict[str, str]:
-    sector_map = {}
-    with open(SECTOR_CSV, encoding="utf-8", newline="") as f:
+def load_edinet_map(csv_path: Path) -> dict[str, str]:
+    edinet_map = {}
+    with open(csv_path, encoding="utf-8", newline="") as f:
         reader = csv.reader(f)
         next(reader)  # ヘッダースキップ
         for row in reader:
-            if len(row) >= 2:
-                sector_map[row[0]] = row[1]
-    return sector_map
+            if len(row) >= 2 and row[1]:
+                edinet_map[row[0]] = row[1]
+    return edinet_map
 
-SECTOR_MAP = load_sector_map()
+SECTOR_MAP = load_edinet_map(SECTOR_CSV)
+NAME_EN_MAP = load_edinet_map(NAME_EN_CSV)
 
 def _get_documents_by_date(date: str) -> list[dict]:
     """指定日の提出書類一覧を取得"""
@@ -101,6 +103,7 @@ def fetch_company_report(ticker: str, year: int) -> dict:
     company_name = doc["filerName"]
     edinet_code = doc["edinetCode"]
     sector = SECTOR_MAP.get(edinet_code, "その他")
+    name_en = NAME_EN_MAP.get(edinet_code)
 
     print(f"書類発見: 会社名 = {company_name}, 提出日 = {doc.get('submitDateTime', '')}")
 
@@ -117,6 +120,7 @@ def fetch_company_report(ticker: str, year: int) -> dict:
     
     return {
         "company_name": company_name,
+        "name_en": name_en,
         "zip_path": xbrl_path,
         "sector": sector,
     }

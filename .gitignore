@@ -224,8 +224,14 @@ frontend/.clerk/
 frontend/.wrangler/
 
 # EDINET downloaded files (PDFs, XBRL)
-backend/data/
+backend/data/*
 !backend/data/sector_map.csv
+!backend/data/name_en_map.csv
 *.xbrl
 # Exclude downloaded PDFs but allow committed ones if any
 backend/**/*.pdf
+
+# Codex setting
+.codex
+
+**/metadata.sqlite*
