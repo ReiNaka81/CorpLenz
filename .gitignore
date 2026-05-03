@@ -227,3 +227,8 @@ backend/data/*
 *.xbrl
 # Exclude downloaded PDFs but allow committed ones if any
 backend/**/*.pdf
+
+# Codex setting
+.codex
+
+**/metadata.sqlite*
